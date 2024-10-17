@@ -1,0 +1,51 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+>
+   	<aura:attribute name="mydata" type="Object"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <!-- 按钮 控制弹出框 -->
+    <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem padding="around-small" size="12">
+              <div class="header">
+                <div>
+                    <lightning:button class="insertBT" onclick="{!c.save1}" label="添加任务" />
+                    <lightning:input/>
+                	<lightning:button onclick="{!c.handleClick}" label="待办事项列表搜索" />
+                </div>	
+              </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+	</div>
+	
+	<!-- 弹出框组件 -->
+	<section aura:id="changeIt" role="dialog" tabindex="-1" class="slds-modal slds-modal_small" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+		<div class="slds-modal__container">
+		<header class="slds-modal__header">
+		<button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+		<!-- <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+		<use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+		</svg> -->
+		<span class="slds-assistive-text">Close</span>
+		</button>
+		<h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal Header</h2>
+		</header>
+		<div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+			<div>
+			<lightning:datatable data="{! v.mydata }"
+	        columns="{! v.mycolumns }"
+	        keyField="id"
+	        onrowselection="{! c.getSelectedName }"/>
+		</div>
+		</div>
+		<footer class="slds-modal__footer">
+		<button class="slds-button slds-button_neutral" onclick="{!c.cance11}">Cancel</button>
+		<button class="slds-button slds-button_brand">Save</button>
+		</footer>
+		</div>
+	</section>
+	<div aura:id="changeZz" class=" slds-backdrop"></div>
+
+	
+</aura:component>

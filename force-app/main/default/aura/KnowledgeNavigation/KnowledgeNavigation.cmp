@@ -1,0 +1,25 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,lightning:isUrlAddressable,Lightning:hasPageReference" controller="KnowledgeNavigationController" access="global">
+
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="topic" type="Topic" />
+    <aura:attribute name="knowledge" type="Knowledge__kav" />
+    <aura:attribute name="isTopicFlag" type="Boolean" />
+    <aura:attribute name="isKnowledgeFlag" type="Boolean" />
+    <aura:attribute name="currentPageType" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.loadNavigation}"/> 
+    
+    <lightning:navigation aura:id="navService"/>
+    <nav role="navigation" aria-label="Breadcrumbs">
+        <ol class="slds-breadcrumb slds-list_horizontal slds-wrap">
+            <li class="slds-breadcrumb__item">
+                <a style="color:#26e626;" onclick="{!c.navagiationToHomePage}">TOP</a>
+            </li>
+            <li class="slds-breadcrumb__item" style="{!v.isTopicFlag || v.isKnowledgeFlag ? 'display:block;' : 'display:none'}">
+                <a name="{!v.topic.Id}" onclick="{!c.navagiationToTopic}" style="{!v.currentPageType == 'Topic' ? 'color:#000000;' : 'color: #26e626;'}">{!v.topic.Name}</a>
+            </li>
+            <li class="slds-breadcrumb__item" style="{!v.isKnowledgeFlag ? 'display:block' : 'display:none'}">
+                <a>{!v.knowledge.Title}</a>
+            </li>
+        </ol>
+    </nav>
+</aura:component>

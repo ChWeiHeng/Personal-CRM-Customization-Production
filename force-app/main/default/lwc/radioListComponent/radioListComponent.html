@@ -1,0 +1,16 @@
+<!-- slicerComponent.html -->
+<template>
+    <div>
+        <p>格式切片器：</p>
+        <template for:each={options} for:item="option">
+            <lightning-button
+                key={option.value}
+                label={option.label}
+                onclick={handleOptionClick}
+                data-option-value={option.value}
+            >
+                <span if:true={option.isSelected} style="color: blue;">✔</span>
+            </lightning-button>
+        </template>
+    </div>
+</template>

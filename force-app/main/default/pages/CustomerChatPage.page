@@ -1,0 +1,308 @@
+<apex:page showHeader="false" standardController="Account" extensions="CustomerChatController">
+<!-- Add custom CSS here -->
+    <meta id="pageViewport" name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width"/> 
+    <style type="text/css">
+        .clear {
+        clear: both;
+        }
+        
+        .inner-box {
+        background-color: #FFFFFF;
+        border-radius: 10px 10px 10px 10px;
+        box-shadow: 0 2px 1px #C9C9C9;
+        display: block;
+        padding: 0;
+        width: 684px;
+        margin: 0 auto 80px auto;
+        overflow: visible;
+        z-index: 1;
+        padding: 0 20px 20px;
+        position: relative;
+        height: 600px;
+        
+        }
+        
+        .chat-buttons{
+        list-style:none !important;
+        }
+        
+        .inner-box-header h3 {
+        font-family: DINMedium;
+        font-size: 2.5em;
+        color: #44Af51;
+        font-weight: normal;
+        margin:0;
+        line-height:40px;
+        text-align:center;
+        }
+        
+        .button-on {
+        background: #00bbce url(../img/button-BG.png) repeat-x;
+        border: 1px solid #7B8589;
+        border-radius: 5px;
+        color: #FFFFFF !important;
+        cursor: pointer;
+        float: right;
+        font-family: DINBold, helvetica, arial;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        margin-top: 8px;
+        min-width: 5px;
+        overflow: hidden;
+        padding: 5px 22px 7px 22px;
+        position: relative;
+        text-decoration: none;
+        text-shadow: 0 -1px #838889;
+        text-transform: uppercase;
+        width: auto;
+        }
+        
+        .button-off {
+        background: #CCCCCC url(../img/button-grey-BG.png) repeat-x;
+        border: 1px solid #CCCCCC;
+        border-radius: 5px;
+        color: #FFFFFF !important;
+        pointer-events: none;
+        cursor: default;
+        float: right;
+        font-family: DINBold, helvetica, arial;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        margin-top: 8px;
+        min-width: 5px;
+        overflow: hidden;
+        padding: 5px 22px 7px 22px;
+        position: relative;
+        text-decoration: none;
+        text-shadow: 0 -1px #CCCCCC;
+        text-transform: uppercase;
+        width: auto;
+        }
+        
+        
+        input
+        {
+        background: none repeat scroll 0 0 #EAEEF0;
+        border: medium none;
+        border-radius: 5px 5px 5px 5px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
+        color: #000000;
+        font-family: Helvetica;
+        font-size: 12px;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 14px;
+        position: relative;
+        text-align: left;
+        width: 95%;
+        }
+        
+        .loader-container p 
+        {
+        font-size: 14px;
+        color: #444f51;
+        font-family: helvetica;
+        margin-top: 20px;
+        }
+        
+        body {
+        background: none !important;
+        font-family: sans-serif !important;
+        font-variant: all-petite-caps !important;
+        font-weight: bold !important;
+        background-color: #aab3b3 !important;
+        font-style: italic !important;
+        }
+        
+        
+        .button-on {
+        border: 1px solid #7B8589;
+        border-radius: 5px;
+        color: #FFFFFF !important;
+        cursor: pointer;
+        float: right;
+        font-family: DINBold, helvetica, arial;
+        
+        }
+        
+        .button-off {
+        border: 1px solid #CCCCCC; */
+        color: #FFFFFF !important;
+        pointer-events: none;
+        float: right;
+        margin-top: 8px;
+        padding: 5px 22px 7px 22px;
+        }
+        .loader
+        {
+        width: 128px;
+        height: 128px;
+        margin: 0 auto;
+        }
+        .loader-container p {
+        text-align: center;
+        }
+        .loader-container 
+        {
+        padding-top: 50px;
+        }           
+        
+        
+        .container {
+        border: 2px solid #dedede;
+        background-color: #F8F8FF;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        list-style:none
+        
+        }
+        
+        .darker {
+        border-color: #ccc;
+        background-color: #ddd;
+        text-align: right;
+        }
+        
+        .container::after {
+        content: "";
+        clear: both;
+        display: table;
+        }
+        
+        .container img {
+        float: left;
+        max-width: 60px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 50%;
+        }
+        
+        .container img.right {
+        float: right;
+        margin-left: 20px;
+        margin-right:0;
+        }
+        
+        
+    </style>
+    <!-- Top header box -->
+    
+    <div class="inner-box">
+        <ul class="inner-box-header">
+            
+            <h3>Custom Chat Window </h3>
+            
+        </ul>
+        
+        <div class="inner-box-content">
+                
+                <div class="loader-container">
+                    <div id="waitingMessage"  class="loader" style="background-position: -2560px 0%; ">
+                    </div>  
+                    <apex:pageBlock title="Chat Record" mode="edit">
+                        <apex:pageBlockTable value="{!recordList}" var="obj" columns="3" footerClass="footer">
+                            <apex:column headerValue="Record">
+                                <apex:outputField value="{!obj.Chat_record__c}"/>
+                            </apex:column>
+                            <apex:column headerValue="Picture">
+                                <apex:outputField value="{!obj.WeChat_Picture__c}"/>
+                            </apex:column>
+                            <apex:column headerValue="Voice">
+                                <apex:outputField value="{!obj.WeChat_Voice__c}"/>
+                            </apex:column>
+                        </apex:pageBlockTable>
+                    </apex:pageBlock>
+                </div>                 
+                
+                <div id="chatInput">             
+                    <div class="textarea message-container" style="display: none;">
+                        <label class="infield" for="{!$Component.message}" style="opacity: 0; display: none; word-wrap:break-word;">type your message here</label>
+                        
+                    </div>
+                    
+                    <ul class="chat-buttons">
+                    </ul>                               
+                </div>
+                
+        </div> 
+        
+    </div>
+    <div class="clear"></div>
+    <script type="text/javascript"> 
+    
+    
+    
+    
+    $(document).ready(function(){       
+        
+        $('.loader').sprite({fps: 12, no_of_frames: 47});
+        window.elementInQuestion = $('#liveAgentClientChat');
+        
+        var hasLiveAgentState = false;
+        var hasLiveAgentStateEnded = false;
+        
+        function rewriteChatText(){
+            $('#liveAgentChatLogText').children().each(function(){
+                if( $(this).hasClass('operator') ){
+                    $myname = $(this).html().match(/<strong>(.*?)<\/strong>/)[1];
+                    $mymessage = $(this).html().replace(/<strong>(.*?)<\/strong>/,'').replace(/<STRONG>(.*?)<\/STRONG>/,'');
+                    $newItem = $('<li class="container">' + $myname + '--' + $mymessage + '</li>');                       
+                    $(this).after($newItem).remove();
+                    $("div.chat-container").scrollTop(1000000);  
+                }else if( $(this).hasClass('client') ){
+                    $mymessage = $(this).html().replace(/<strong>(.*?)<\/strong>/,'').replace(/<STRONG>(.*?)<\/STRONG>/,'');  
+                    $newItem = $('<li class="container darker">' +'<b>You :</b>'+ $mymessage + '</li>');                        
+                    $(this).after($newItem).remove();
+                    $("div.chat-container").scrollTop(1000000);  
+                }
+            });  
+            
+        }
+        function checkClass(){
+            
+            if (window.elementInQuestion.hasClass('liveAgentState') && !hasLiveAgentState) {
+                $(document).trigger('elementLiveAgentState');
+                hasLiveAgentState = true;
+            }
+            if (window.elementInQuestion.hasClass('liveAgentStateEnded') && !hasLiveAgentStateEnded) {
+                $(document).trigger('elementLiveAgentStateEnded');
+                clearInterval(window.classCheckerInterval);
+                hasLiveAgentStateEnded = true;
+            }
+            
+        }
+        
+        window.classCheckerInterval = setInterval(checkClass, 100);
+        window.classCheckerInterval = setInterval(rewriteChatText, 100);
+        
+        $(document).bind('elementLiveAgentStateEnded', function(){
+            $('.chat-buttons').hide();
+            $('.loader-container').hide();
+            $('.textarea.message-container').hide();
+        });
+        
+        $(document).bind('elementLiveAgentState', function(){
+            $('.loader-container').hide();
+            
+            $('#liveAgentChatLog').removeClass("liveAgentChatElement");
+            $('#liveAgentChatLog').addClass("chat-container");
+            $('#liveAgentChatLog').css("border", "none");
+            $('#liveAgentChatLog').css("height", "410px");               
+            
+            $('#liveAgentChatLogText').addClass("chat-container");              
+            
+            $('.textarea.message-container').css("display","");
+            $input = $("#liveAgentChatInput");
+            $input.attr("style", "display: block; resize: none; width: 629px; background: #F8F8FF; border-radius: 5px; height: 48px; border: 1px solid #0000FF; padding: 5px; font-size: 15px;");
+            $sendButton = $('span[id$="sendButton"]');
+            $newSendButton = $('<a href="javascript:SfdcApp.LiveAgent.Chasitor.sendMessage();"  class="button-on"  title="send">Send</a>');  
+            $sendButton.after($newSendButton).remove();             
+            $endButton = $('span[id$="endButton"]');
+            $newEndButton = $('<a href="javascript:SfdcApp.LiveAgent.Chasitor.endChat();" class="button-off"   title="Cancel">End chat</a>');
+            $endButton.after($newEndButton).remove().wrapAll('<div class="buttonsRow"/>');;     
+            
+        });
+    });    
+    </script> 
+</apex:page>

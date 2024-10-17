@@ -1,0 +1,8 @@
+<apex:component controller="QceeSendEmailTemplateController" access="global">
+  <apex:dataTable value="{!Opportunitys}" var="s_opportunity">
+		<apex:column >
+			<apex:facet name="header">Opportunity Name</apex:facet>
+			{!s_opportunity.Name}
+		</apex:column>
+	</apex:dataTable>
+</apex:component>

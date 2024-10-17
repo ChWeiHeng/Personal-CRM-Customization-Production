@@ -1,0 +1,90 @@
+.slds-modal__container {
+    width: 50rem; /* 自定义宽度 */
+    max-width: 100%;
+}
+
+.slds-modal__header {
+    border-bottom: 1px solid #d8dde6; /* 分隔线样式 */
+}
+
+.slds-modal__footer {
+    border-top: 1px solid #d8dde6; /* 分隔线样式 */
+}
+
+/* 调整 accordion 的标题样式 */
+.slds-accordion__summary {
+    background-color: #f4f6f9; /* 设置背景颜色 */
+    border: 1px solid #d8dde6; /* 设置边框颜色 */
+    padding: 12px 16px; /* 添加内边距 */
+    font-weight: bold; /* 加粗标题字体 */
+    color: #333; /* 设置标题字体颜色 */
+}
+
+/* 鼠标悬停时的效果 */
+.slds-accordion__summary:hover {
+    background-color: #e0e6eb; /* 悬停背景颜色 */
+}
+
+/* 调整 accordion 内容区域的样式 */
+.slds-accordion__content {
+    background-color: #ffffff; /* 设置内容区域背景颜色 */
+    border-top: 1px solid #d8dde6; /* 设置内容区域的上边框 */
+    padding: 16px; /* 添加内容区域的内边距 */
+}
+
+/* 设置输入字段的外观 */
+.lightning-input-field {
+    margin-bottom: 16px; /* 调整字段之间的间距 */
+}
+
+/* 调整列的样式 */
+.slds-col {
+    padding: 8px; /* 调整列的内边距 */
+}
+
+/* 添加可选的折叠标识图标 */
+.slds-accordion__summary-icon {
+    margin-right: 8px; /* 为图标添加右边距 */
+}
+
+/* 如果需要，可以调整特定字段的样式 */
+.lightning-input-field input {
+    border: 1px solid #d8dde6; /* 自定义输入框边框 */
+    border-radius: 4px; /* 自定义输入框边角 */
+    padding: 8px; /* 添加内边距 */
+}
+
+/* 修改整体的容器样式 */
+.lightning-accordion {
+    border-radius: 8px; /* 添加容器的圆角 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+
+.custom-error-icon {
+    --sds-c-icon-color-foreground-default: red;
+}
+
+.custom-button-container {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background-color: #0070d2;  /* Salesforce blue button background */
+    border-radius: 0.25rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+    --sds-c-icon-color-foreground-default: white;
+    margin-left: 0.5rem;
+}
+
+.custom-button-container:hover {
+    background-color: #005fb2;  /* Darker blue on hover */
+}
+
+.button-label {
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+}

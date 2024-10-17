@@ -1,0 +1,13 @@
+<apex:page Controller="SearchknowledgeDocumentController" lightningStylesheets="true" cache="false">
+    <apex:form >
+        <apex:inputText value="{!searchKey}" label="Input"/>
+        <apex:commandButton value="Search records" action="{!SearchKnowledgeData}"/>
+        <apex:commandButton value="Clear records" action="{!ClearData}"/>
+        <apex:pageBlock title="Search Result">
+            <apex:pageBlockTable value="{!queryWechatList}" var="wechat">
+                <apex:column value="{!wechat.name}"/>
+                <apex:column value="{!wechat.Chat_record__c}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,42 @@
+<template>
+    <lightning-card title="报表导出">
+        <!-- 搜索框 -->
+        <lightning-input 
+            type="text" 
+            label="搜索报表" 
+            value={searchTerm} 
+            onchange={handleSearchTermChange}
+        ></lightning-input>
+        
+        <!-- 搜索按钮 -->
+        <lightning-button 
+            variant="brand" 
+            label="搜索" 
+            title="搜索" 
+            onclick={handleSearch}
+        ></lightning-button>
+        
+        <!-- 数据表格 -->
+        <template if:true={hasReports}>
+            <lightning-datatable
+                key-field="Id"
+                data={reports}
+                columns={columns}
+                onrowselection={handleRowSelection}
+                selected-rows={selectedRows}
+            ></lightning-datatable>
+        </template>
+        
+        <!-- 导出按钮 -->
+        <lightning-button 
+            label="导出报表" 
+            onclick={handleExportReports} 
+            disabled={isExportDisabled}
+        ></lightning-button>
+        
+        <!-- 下载链接 -->
+        <template if:true={exportFileUrl}>
+            <a href={exportFileUrl} download="reports.csv">点击这里下载导出的报表</a>
+        </template>
+    </lightning-card>
+</template>

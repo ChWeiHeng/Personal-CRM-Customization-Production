@@ -1,0 +1,21 @@
+.THIS .slds-radio {
+  display: inline !important;
+  margin-right: 70px;
+}
+
+.THIS .radioCss {
+  margin-left: 290px;
+}
+
+.THIS .searchCss {
+  margin-top: -20px;
+  margin-left: 220px;
+}
+
+.THIS .messageoutput {
+  color: rgb(0, 0, 0);
+}
+
+.THIS .saveButtonCss {
+  float: right;
+}

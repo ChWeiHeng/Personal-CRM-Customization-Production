@@ -1,0 +1,46 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,Lightning:hasPageReference" controller="KnowledgeTopicCatalogController" access="global">
+
+    <aura:attribute name="knowledgeArticles" type="List" />
+    <aura:attribute name="allKnowledgeArticles" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.loadTopics}"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="loadMoreDataFlag" type="Boolean" />
+    
+    <lightning:navigation aura:id="navService"/>
+    <aura:iteration items="{!v.knowledgeArticles}" var="knowledge">
+        <ul class=" article-list " aria-describedby="" data-aura-rendered-by="582:0">
+            <li style="margin: 0;border-bottom: 1px solid #efefef">
+                <article class="summary" data-aura-rendered-by="4:1455;a">
+                    <a class="sldKnowledgeStlye" name="{!knowledge.KnowledgeArticleId}" onclick="{!c.handleKnowledgePageNavigate}">
+                        <h2 class="article-head" data-aura-rendered-by="11:1455;a">{!knowledge.Title}</h2>
+                    </a>
+                    <div class="topicCatalogFooterStyle">
+                        <span class="view-count" data-aura-rendered-by="17:1455;a">
+                            {!knowledge.ViewCount} ビュー
+                        </span>
+                        <span class="dot" data-aura-rendered-by="19:1455;a">
+                            •
+                        </span>
+                        <span class="date" data-aura-rendered-by="21:1455;a">
+                            <span data-aura-rendered-by="24:1455;a" class="uiOutputDate" data-aura-class="uiOutputDate">
+                                {!knowledge.LastPublishedDate}
+                            </span>
+                        </span>
+                    </div>
+                </article>
+            </li>
+            <br/>
+        </ul>
+    </aura:iteration>
+    <br/>
+    <br/>
+    <div style="{!v.loadMoreDataFlag ? 'display:none' : 'display:block'}">
+        <lightning:layout horizontalAlign="center">
+            <a onclick="{!c.loadMoreData}" style="text-decoration:none;" class="article-link selfServiceArticleHeaderDetail" data-special-link="true" data-aura-rendered-by="10:1455;a" data-aura-class="selfServiceArticleHeaderDetail">
+                <div style="width:200px;height:40px;background-color:#08374d;border: 1px solid;border-radius: 25px;color: white;text-align: center;padding-top: 10px;font-size: 12px;">
+                    さらに読み込み
+                </div>
+            </a>
+        </lightning:layout>
+    </div>
+</aura:component>

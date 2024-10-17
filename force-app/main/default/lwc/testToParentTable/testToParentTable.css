@@ -1,0 +1,11 @@
+/* .custom-sub-table {
+    display: table-row;
+} */
+
+table {
+    border-collapse: collapse;
+  }
+  
+  .row {
+    display: table-row;
+  }

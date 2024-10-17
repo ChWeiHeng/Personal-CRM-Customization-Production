@@ -1,0 +1,57 @@
+<aura:component controller="UserWeChatController"  implements="force:hasRecordId,force:lightningQuickAction,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes">
+    <!-- 定义前台变量 -->
+    <aura:attribute name="datas" type="List"/>
+    <aura:attribute name="createTime" type="Date"/>
+    <aura:attribute name ="recordId" type ="Id"/>
+    <!-- 调用初始化方法 -->
+    <aura:handler name="init" value="{! this }" action="{! c.doInit }"/>
+    <!-- 迭代数据获取多个Card -->
+	<aura:iteration items="{!v.datas}" var="item">
+        <lightning:card variant="Narrow" title="{!item.Record_Date__c}" iconName="standard:email" footer="" >
+            <div class="fontType">
+                <!-- <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                    用户名: &nbsp;&nbsp;&nbsp;&nbsp;{!item.Name}
+                </p> -->
+                <!-- 客户聊天内容 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                    {!item.Name}:&nbsp;&nbsp;
+                    <p class="Record"><lightning:formattedRichText value="{!item.WeChat_TextArea__c}" /></p>
+                </p>
+                <!-- 用户聊天内容 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                    {!item.SendUser__r.Name}:&nbsp;&nbsp;
+                    <p class="Record"><lightning:formattedRichText value="{!item.WeChat_User_TextArea__c}" /></p>
+                </p>
+                <!-- 客户聊天图片 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                     {!item.Name}:&nbsp;&nbsp;
+                    <lightning:formattedUrl label="To view picture" value="{!item.WeChat_Picture__c}" tooltip="Omit leading slash" target="_blank" />
+                </p>
+                <!-- 用户聊天图片 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                    {!item.SendUser__r.Name}:&nbsp;&nbsp;
+                    <lightning:formattedUrl label="To view picture" value="{!item.WeChat_User_Picture__c}" tooltip="Omit leading slash" target="_blank" />
+                </p>
+                <!-- 客户聊天语音 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                     {!item.Name}:&nbsp;&nbsp;
+                    <lightning:formattedUrl label="To view Voice" value="{!item.WeChat_Voice__c}" tooltip="Omit leading slash" target="_blank" />
+                </p>
+                <!-- 用户聊天语音 -->
+                <p class="slds-p-horizontal_small">
+                    <lightning:dynamicIcon type="ellie" alternativeText="Ellie intelligence"/>
+                    {!item.SendUser__r.Name}:&nbsp;&nbsp;
+                    <lightning:formattedUrl label="To view Voice" value="{!item.WeChat_User_Voice__c}" tooltip="Omit leading slash" target="_blank" />
+                </p>
+
+            </div>
+        </lightning:card>
+        <hr/>
+    </aura:iteration> 
+</aura:component>

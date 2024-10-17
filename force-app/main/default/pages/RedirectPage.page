@@ -1,0 +1,6 @@
+<apex:page controller="RedirectController" action="{!validateAndRedirect}">
+    <script>
+        // 提示用户正在处理请求
+        document.write("Redirecting to authorization page, please wait...");
+    </script>
+</apex:page>

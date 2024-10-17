@@ -1,0 +1,24 @@
+<apex:page controller="WorklineCallbackController" action="{!init}">
+    <script>
+        // 使用 JavaScript 触发 Apex 方法
+        window.onload = function() {
+            // 调用一个 Apex 方法
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.WorklineCallbackController.saveCallbackData}',
+                function(result, event) {
+                    if (event.status) {
+                        console.log('Callback data saved successfully.');
+                    } else {
+                        console.error('Error saving callback data: ' + event.message);
+                    }
+                }
+            );
+        };
+    </script>
+    <apex:form >
+        <apex:outputText value="Workline Callback Received!"/>
+        <!-- 显示回调数据 -->
+        <apex:outputText value="{!code}"/>
+        <apex:outputText value="{!state}"/>
+    </apex:form>
+</apex:page>

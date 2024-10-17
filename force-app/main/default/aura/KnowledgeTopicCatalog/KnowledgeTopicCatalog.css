@@ -1,0 +1,18 @@
+.THIS {
+}
+
+.THIS .sldKnowledgeStlye {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.THIS .topicCatalogFooterStyle {
+    padding: 10px 0 0 0;
+    font-size: .8125em;
+    color: #4F4F4F;
+    letter-spacing: 1.2px;
+    margin-bottom: 20px;
+}

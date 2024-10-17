@@ -1,0 +1,93 @@
+<template>
+    <lightning-card title="Apex Class Search" icon-name="custom:custom57">
+        <div class="slds-var-m-around_medium">
+            <lightning-input type="search" onchange={handleKeyChange}
+                class="slds-show slds-is-relative slds-var-m-bottom_small" label="Search">
+            </lightning-input>
+            <template if:true={apexClasses}>
+                <!-- <template for:each={apexClasses} for:item="apexr">
+                    <p key={apexr.Id}>{apexr.Name}</p>
+                </template> -->
+                <template for:each={apexClasses} for:item="apexr">
+                    <lightning-card key={apexr.Id}>
+                        <h3 slot="title">
+                            <lightning-icon icon-name="doctype:xml" alternative-text="XML file" title="XML">
+                            </lightning-icon>
+                            {apexr.Name}
+                        </h3>
+                        <lightning-button label="Edit" onclick={handleEdit} slot="actions" data-url={apexr.Id}>
+                        </lightning-button>
+                        <lightning-button label="View" onclick={handleView} data-id={apexr.Id} slot="actions">
+                        </lightning-button>
+                        <lightning-button if:true={apexr.showCode} label="Hide" onclick={handleHide} data-id={apexr.Id}
+                            slot="actions">
+                        </lightning-button>
+                        <div class="slds-scrollable">
+                            <div class="slds-text-longform">
+                                <div class="slds-page-header__row slds-page-header__row_gutters">
+                                    <div class="slds-page-header__col-details">
+                                        <ul class="slds-page-header__detail-row" style="list-style: none;">
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="Api Version">Api
+                                                    Version
+                                                </div>
+                                                <div class="slds-truncate" title={apexr.ApiVersion}>{apexr.ApiVersion}
+                                                </div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="Status">Status</div>
+                                                <div class="slds-truncate" title={apexr.Status}>{apexr.Status}</div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="Namespace Prefix">
+                                                    Namespace Prefix
+                                                </div>
+                                                <div class="slds-truncate" title={apexr.NamespacePrefix}>
+                                                    {apexr.NamespacePrefix}
+                                                </div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="CreatedDate">Created Date
+                                                </div>
+                                                <div class="slds-truncate">{apexr.CreatedDate}</div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="CreatedBy Name">
+                                                    Created By Name
+                                                </div>
+                                                <div class="slds-truncate">{apexr.CreatedBy.Name}
+                                                </div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="LastModifiedDate">
+                                                    Last Modified Date
+                                                </div>
+                                                <div class="slds-truncate">{apexr.LastModifiedDate}
+                                                </div>
+                                            </li>
+                                            <li class="slds-page-header__detail-block">
+                                                <div class="slds-text-title slds-truncate" title="LastModifiedBy Name">
+                                                    Last Modified By Name
+                                                </div>
+                                                <div class="slds-truncate">
+                                                    {apexr.LastModifiedBy.Name}
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <blockquote if:true={apexr.showCode}>
+                                    <pre>
+                                        <code class="language-html">
+                                            {apexr.Body}
+                                        </code>
+                                    </pre>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

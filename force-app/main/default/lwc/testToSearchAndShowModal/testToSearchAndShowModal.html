@@ -1,0 +1,43 @@
+<template>
+    <div class="slds-box slds-p-top_small" style="background-color: white;">
+        <lightning-record-edit-form object-api-name="Accessory__c" id="createWechatForm" >
+            <lightning-input-field field-name="WeChat__c" variant="label-hidden" onchange={handleWechatSelection} value={testValue} required> </lightning-input-field>
+        </lightning-record-edit-form>
+    </div>
+
+    <template if:true={showConfirmationDialog}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container modalWidthAdjust">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal header</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <h2 class="slds-text-heading_medium">确认选择</h2>
+                    <p>您是否确认选择此数据？</p>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-modal__footer">
+                        <lightning-button
+                            label="确认"
+                            variant="brand"
+                            onclick={handleConfirmation}
+                        ></lightning-button>
+                        <lightning-button
+                            label="取消"
+                            variant="neutral"
+                            onclick={handleCancellation}
+                        ></lightning-button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+</template>

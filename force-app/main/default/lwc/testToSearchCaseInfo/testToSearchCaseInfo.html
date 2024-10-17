@@ -1,0 +1,169 @@
+<template>
+    <div class={className}>
+        <template if:true={label}>
+            <p class="slds-form-element__label">
+                <template if:true={required}>
+                    <span class="requiredAsterisk">*</span>
+                </template>
+                {label}
+            </p>
+        </template>
+        <div class="slds-combobox_container" aria-expanded="true" aria-haspopup="listbox" role="combobox">
+            <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click slds-is-open">
+                <!-- Search Input Box -->
+                <template if:false={showPill}>
+                    <lightning-input onchange={searchRecords} onclick={showRecords} onblur={blurEvent} class="inputBox"
+                        type="search" autocomplete="off" variant="label-hidden"
+                        placeholder={placeholder}></lightning-input>
+                    <div if:true={showSpinner}>
+                        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                    </div>
+                </template>
+
+                <!-- Selected Value Pill -->
+                <div if:true={showPill} class="pillContainer">
+                    <lightning-pill data-id={carId} data-title={workingDate} data-key={recordTypeName} class="fullWidth"
+                        label={selectedRecord.label} name={selectedRecord.value} onremove={removeItem}>
+                        <lightning-icon icon-name={iconName} alternative-text="icon" size="x-small"></lightning-icon>
+                    </lightning-pill>
+                </div>
+
+                <!-- Dropdown List -->
+                <template if:true={showDropdown}>
+                    <div class="slds-dropdown slds-dropdown_length-5 slds-dropdown_fluid">
+                        <ul class="slds-listbox slds-listbox_vertical recordListBox">
+                            <template if:false={message}>
+                                <template for:each={recordsList} for:item="rec">
+                                    <li key={rec.value} data-key={rec.value} class="slds-listbox__item eachItem"
+                                        onmousedown={selectItem}>
+                                        <div class="slds-media slds-listbox__option_entity">
+                                            <lightning-icon icon-name={iconName} alternative-text="icon"
+                                                size="small"></lightning-icon>
+                                            <span class="verticalAlign slds-truncate">{rec.label}</span>
+                                        </div>
+                                    </li>
+                                </template>
+                                <li class="slds-listbox__item eachItem" onmousedown={openPopup}>
+                                    <div class="slds-media slds-listbox__option_entity">
+                                        More Infomation
+                                    </div>
+                                </li>
+                            </template>
+                            <template if:true={message}>
+                                <li class="slds-listbox__item">
+                                    <span class="slds-media slds-listbox__option_entity">{message}</span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- popupComponent.html -->
+    <template if:true={showPopup}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+            class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container modalWidthAdjust">
+                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                    <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                    </svg>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Modal header</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-card title="Custom Account Search">
+                        <lightning-layout multiple-rows="true" vertical-align="end">
+                            <lightning-layout-item size="4" padding="around-small">
+                                <!--Input text to Search Account-->
+                                <lightning-input type="text" label="Enter Account Name To Search" value={searchKey}
+                                    onchange={handelSearchKey}>
+                                </lightning-input>
+                            </lightning-layout-item>
+
+                            <lightning-layout-item size="2" padding="around-small">
+                                <!--Search Button-->
+                                <lightning-button label="Search" variant="brand" onclick={searchAccountHandler}>
+
+                                </lightning-button>
+                            </lightning-layout-item>
+                            <lightning-layout-item size="12" padding="around-small">
+                                <!--List Of Account Using data Tabel-->
+                                <!-- <lightning-datatable key-field="id" data={accounts} columns={cols} sorted-by={sortBy}
+                                    sorted-direction={sortDirection} onsort={handleSortAccountData}
+                                    hide-checkbox-column="true" onrowaction={handleRowAction}>
+                                </lightning-datatable> -->
+
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered"
+                                    aria-labelledby="element-with-table-label other-element-with-table-label">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <!-- 添加checkbox列 -->
+                                            <th scope="col">
+                                                Select Row
+                                            </th>
+                                            <template if:true={cols}>
+                                                <template for:each={cols} for:item="header">
+                                                    <th key={header.fieldName} data-id={header.fieldName}
+                                                        data-title="asc" onclick={sortByFieldName} class="" scope="col">
+                                                        <a href="javascript:void(0);"
+                                                            class="slds-th__action slds-text-link--reset">
+                                                            <span class="slds-assistive-text">Sort</span>
+                                                            <span class="slds-truncate"
+                                                                title={header.fieldName}>{header.fieldName}</span>
+                                                        </a>
+                                                    </th>
+                                                </template>
+                                            </template>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={accounts} for:item="acc">
+                                            <tr key={acc.Id} class="slds-hint-parent">
+                                                <!-- 添加每行的checkbox列 -->
+                                                <td data-label="Select">
+                                                    <div class="slds-truncate" title="Select">
+                                                        <label class="slds-checkbox">
+                                                            <input type="checkbox" onchange={handleRowSelection} data-id={acc.Id}/>
+                                                            <span class="slds-checkbox_faux"></span>
+                                                            <span class="slds-assistive-text">Select Row</span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <th data-label="Name" scope="row">
+                                                    <div class="slds-truncate" title={acc.Name}>
+                                                        <a href={accURL} target="_blank" data-id={acc.Id}
+                                                            onclick={selectedValue}>{acc.Name}</a>
+                                                    </div>
+                                                </th>
+                                                <td data-label="Phone">
+                                                    <div class="slds-truncate" title={acc.Phone}>{acc.Phone}</div>
+                                                </td>
+                                                <td data-label="Industry">
+                                                    <div class="slds-truncate" title={acc.Industry}>{acc.Industry}</div>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+
+
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-card>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closePopup}
+                        aria-label="Cancel and close">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick={handleConfirmSelect}>Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </template>
+
+</template>

@@ -1,0 +1,68 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:html tag="style">
+        .slds-modal__container {
+        width : 95% !important;
+        max-width : 100% !important;
+        height : 100%;
+        max-height : 100%;
+        }
+        .uiButton--brand {
+        display:none;
+        }
+
+        .mobileSection {
+        width:100%;
+        height:100%;
+        position:fixed;
+        right:0;
+        top: 6%;
+        }
+
+        .modal-footer{
+        display:none;
+        }
+
+    </aura:html>
+
+    <aura:attribute name="isDesk" type="Boolean" default="true" />
+
+
+    <div class="demo1">
+        <section class=" mobileSection">
+            <div class="sldscontainer">
+                <aura:if isTrue="{!v.isDesk}">
+                    <aura:html tag="style">
+                        .sldscontainer {
+                        display: flex;flex-direction: column;height:90%;justify-content: center;
+                        }
+                    </aura:html>
+                    <!-- <div class="modal-header slds-modal__header slds-size_1-of-1">
+                        <h4 class="title slds-text-heading-medium">P</h4>
+                    </div> -->
+                </aura:if>
+                <!-- <div class="slds-modal__content slds-p-around_medium dataHeightDiv" id="modal-content-id-1"
+                    style="height: 100%;overflow:auto;">
+                    <iframe width="100%" height="100%" src="https://q5h3fg.axshare.com"
+                        allow="geolocation *; microphone *; camera *"></iframe>
+                </div> -->
+                <div class="slds-modal__content slds-p-around_medium dataHeightDiv" id="modal-content-id-1"
+                    style="height: 100%;overflow:auto;">
+                    <c:dynamicRecordCreationRows></c:dynamicRecordCreationRows>
+                </div>
+
+                <!-- <aura:if isTrue="{!v.isDesk}">
+                    <footer class="slds-modal__footer">
+                        <lightning:button class="{!$Browser.isPhone ? 'MobileBtn' : ''}" label="Cancel"
+                            variant="neutral" onclick="{!c.doClose}">
+                        </lightning:button>&nbsp;&nbsp;
+                        <lightning:button class="{!$Browser.isPhone ? 'MobileBtn' : ''}" label="Save" variant="brand"
+                            onclick="{!c.doClose}">
+                        </lightning:button>
+                    </footer>
+                </aura:if> -->
+            </div>
+        </section>
+    </div>
+    <div class="slds-backdrop slds-backdrop-open " id="backGroundSectionId " style=" display:none; "></div>
+
+</aura:component>

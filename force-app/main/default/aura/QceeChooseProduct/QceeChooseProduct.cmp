@@ -1,0 +1,479 @@
+<aura:component controller="QceeChooseProductController" implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global">
+  <!-- 产品或附件总数据 -->
+  <aura:attribute name="allData" type="List"/>
+  <!-- 产品或附件分页数据 -->
+  <aura:attribute name="data" type="List"/>
+  <!-- 产品或附件当前页数据 -->
+  <aura:attribute name="currentPageNumber" type="Integer" default="1"/>
+  <!-- 产品或附件每页存放数据数量 -->
+  <aura:attribute name="pageSize" type="Integer" default="5"/>
+  <!-- 产品或附件总页数 -->
+  <aura:attribute name="totalPages" type="Integer" default="0"/>
+  <!-- 产品或附件页数点击显示 -->
+  <aura:attribute name="pageList" type="List"/>
+
+  <!-- 已选中产品总数据 -->
+  <aura:attribute name="selData" type="List"/>
+  <!-- 已选中产品分页数据 -->
+  <aura:attribute name="selTemporaryPaginationList" type="List"/>
+  <!-- 已选中产品当前页数据 -->
+  <aura:attribute name="selProCurrentPageNumber" type="Integer" default="1"/>
+  <!-- 已选中产品每页存放数据数量 -->
+  <aura:attribute name="selPageSize" type="Integer" default="5"/>
+  <!-- 已选中产品总页数 -->
+  <aura:attribute name="selProTotalPages" type="Integer" default="0"/>
+  <!-- 已选中产品页数点击显示 -->
+  <aura:attribute name="selProPageList" type="List"/>
+
+  <!-- 已选中附件总数据 -->
+  <aura:attribute name="selAccData" type="List"/>
+  <!-- 已选中附件分页数据 -->
+  <aura:attribute name="selAccTemporaryPaginationList" type="List"/>
+  <!-- 已选中附件当前页数据 -->
+  <aura:attribute name="selAccCurrentPageNumber" type="Integer" default="1"/>
+  <!-- 已选中附件每页存放数据数量 -->
+  <aura:attribute name="selAccPageSize" type="Integer" default="5"/>
+  <!-- 已选中附件总页数 -->
+  <aura:attribute name="selAccTotalPages" type="Integer" default="0"/>
+  <!-- 已选中附件页数点击显示 -->
+  <aura:attribute name="selAccPageList" type="List"/>
+
+  <!-- 根据单个产品查询的标准价格数据 -->
+  <aura:attribute name="priceEntry" type="PricebookEntry"/>
+  <!-- 产品数据表格显示开关 -->
+  <aura:attribute name="proDataPageSwitch" type="String" default="close"/>
+  <!-- 已选中产品数据表格显示开关 -->
+  <aura:attribute name="selProDataPageSwitch" type="String" default="close"/>
+  <!-- 附件数据表格显示开关 -->
+  <aura:attribute name="accDataPageSwitch" type="String" default="close"/>
+  <!-- 已选中附件数据表格显示开关 -->
+  <aura:attribute name="selAccDataPageSwitch" type="String" default="close"/>
+  <!-- 查询类型复选框 -->
+  <aura:attribute name="options" type="List" default="[
+      {'label': '产品', 'value': 'product'},
+      {'label': '附件', 'value': 'accessory'}
+  ]"/>
+  <!-- 查询类型值 -->
+  <aura:attribute name="value" type="String" default="product"/>
+  <!-- 查询参数 -->
+  <aura:attribute name="searchParam" type="String"/>
+  <!-- 返回错误消息 -->
+  <aura:attribute name="errMessages" type="String[]" default="[]"/>
+  <!-- 页面加载完毕执行 -->
+  <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+  <!-- 价格手册选择 -->
+  <aura:attribute name="selectPriceBookOptions" type="List" default="[
+      {'label': '标准价格手册', 'value': 'Standard'},
+      {'label': '自定义产品价格手册', 'value': '自定义产品价格手册'},
+  ]"/>
+  <!-- 查询价格手册值 -->
+  <aura:attribute name="priceBookValue" type="String" default="Standard"/>
+  
+  <!-- 产品类型选择 -->
+  <aura:attribute name="selectProductTypeOptions" type="List" default="[
+      {'label': '服务型产品', 'value': 'ServiceProduct'},
+      {'label': '流程型产品', 'value': 'FlowProduct'},
+  ]"/>
+  <!-- 查询产品类型值 -->
+  <aura:attribute name="productTypeValue" type="String"/>
+
+  <!-- 产品型号选择 -->
+  <aura:attribute name="selectProductModelOptions" type="List" default="[
+      {'label': 'GcA01', 'value': 'GcA01'},
+      {'label': 'GcA02', 'value': 'GcA02'},
+  ]"/>
+  <!-- 查询产品型号值 -->
+  <aura:attribute name="productModelValue" type="String"/>
+
+  <!-- 附件类型选择 -->
+  <aura:attribute name="selectAccessoryTypeOptions" type="List" default="[
+      {'label': '服务型附件', 'value': 'ServiceAccessory'},
+      {'label': '流程型附件', 'value': 'FlowAccessory'},
+  ]"/>
+  <!-- 查询附件类型值 -->
+  <aura:attribute name="accessoryTypeValue" type="String"/>
+
+  <!-- 附件型号选择 -->
+  <aura:attribute name="selectAccessoryModelOptions" type="List" default="[
+      {'label': 'FJA01', 'value': 'FJA01'},
+      {'label': 'FJA02', 'value': 'FJA02'},
+  ]"/>
+  <!-- 查询附件型号值 -->
+  <aura:attribute name="accessoryModelValue" type="String"/>
+
+  <!-- 产品标准总价 -->
+  <aura:attribute name="proStandardTotalPrice" type="Integer" default="0"/>
+  <!-- 产品成本总价 -->
+  <aura:attribute name="proCostTotalPrice" type="Integer" default="0"/>
+  <!-- 产品销售总价 -->
+  <aura:attribute name="proSalesTotalPrice" type="Integer" default="0"/>
+  <!-- 产品Id绑定上次销售价格及当前输入销售价格 -->
+  <aura:attribute name="proPreviousAndCurrentPriceList" type="String[]" default="[]"/>
+  <!-- 产品总选择数量 -->
+  <aura:attribute name="proSalesTotalQuantity" type="Integer" default="0"/>
+  <!-- 产品Id绑定上次数量及当前输入数量 -->
+  <aura:attribute name="proPreviousAndCurrentQuantityList" type="String[]" default="[]"/>
+
+  <!-- 附件标准总价 -->
+  <aura:attribute name="accStandardTotalPrice" type="Integer" default="0"/>
+  <!-- 附件成本总价 -->
+  <aura:attribute name="accCostTotalPrice" type="Integer" default="0"/>
+  <!-- 附件销售总价 -->
+  <aura:attribute name="accSalesTotalPrice" type="Integer" default="0"/>
+  <!-- 附件Id绑定上次销售价格及当前输入销售价格 -->
+  <aura:attribute name="accPreviousAndCurrentPriceList" type="String[]" default="[]"/>
+  <!-- 附件总选择数量 -->
+  <aura:attribute name="accSalesTotalQuantity" type="Integer" default="0"/>
+  <!-- 附件Id绑定上次数量及当前输入数量 -->
+  <aura:attribute name="accPreviousAndCurrentQuantityList" type="String[]" default="[]"/>
+
+  <!-- navigation 跳转组件 -->
+  <lightning:navigation aura:id="navService"/>
+  <div class="c-container">
+  <!-- return error msg -->
+  <aura:if isTrue="{!v.errMessages.length > 0}">
+    <div style="width:100%;color:rgb(252, 2, 2)">
+      <ui:message title="Error" severity="error" closable="false">
+        <aura:iteration items="{!v.errMessages}" var="item">
+          <ui:outputText class="messageoutput" value="{!item.message}"/><br/>
+        </aura:iteration>
+      </ui:message>
+    </div>
+  </aura:if>
+    <lightning:layout multipleRows="true">
+      <lightning:layoutItem padding="around-small" size="12">
+        <lightning:layout>
+          <lightning:layoutItem padding="around-small" size="6">
+            <div style="{!v.proDataPageSwitch == 'open' || v.accDataPageSwitch == 'open' ? 'display:none' : 'display:block'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">选择列表</td>
+                </tr>
+              </table>
+            </div>
+            <div style="{!v.proDataPageSwitch == 'close' ? 'display:none' : 'display:block'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">产品列表</td>
+                </tr>
+              </table>
+            </div>
+            <div style="{!v.accDataPageSwitch == 'close' ? 'display:none' : 'display:block'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">附件列表</td>
+                </tr>
+              </table>
+            </div>
+            <div class="slds-box slds-theme_default" style="margin-right: 20px;height:691px;">
+              <!-- <lightning:layout multipleRows="true" horizontalAlign="left" verticalAlign="end">
+                <lightning:layoutItem class="center-align" size="6" padding="around-small" > -->
+                  <div class="radioCss">
+                    <lightning:radioGroup class="slds-radio" name="radio" options="{!v.options}" value="{!v.value}" type="radio" />
+                  </div>
+                  <!-- serach product input -->
+                  <div class="searchCss">
+                    <div style="width:182px;margin-left:65px;">
+                      <lightning:combobox name="priceBook" placeholder="标准价格手册" options="{!v.selectPriceBookOptions}" value="{v.priceBookValue}"/>
+                    </div>
+                    <div style="{!v.value == 'accessory' ? 'display:none;' : 'width:182px;margin-left:65px;'}">
+                      <lightning:combobox style="width:85px;float:left;" name="product" placeholder="产品" options="{!v.selectProductTypeOptions}" value="{!v.productTypeValue}"/>
+                      <lightning:combobox style="width:85px;margin-left: 10px;float:left;" name="productModel" placeholder="产品型号" options="{!v.selectProductModelOptions}" value="{!v.productModelValue}"/>
+                    </div>
+                    <div style="{!v.value == 'product' ? 'display:none;' : 'width:182px;margin-left:65px;'}">
+                      <lightning:combobox style="width:85px;float:left;" name="accessory" placeholder="附件" options="{!v.selectAccessoryTypeOptions}" value="{!v.accessoryTypeValue}"/>
+                      <lightning:combobox style="width:85px;margin-left: 10px;float:left;" name="accessoryModel" placeholder="附件型号" options="{!v.selectAccessoryModelOptions}" value="{!v.accessoryModelValue}"/>
+                    </div>
+                    <div class="form-group" style="width:300px;margin-left:65px;" >
+                      <div style="width:182px;float:left;display:inline;">
+                        <lightning:input type="text" name="searchParam" value="{!v.searchParam}"/>
+                      </div>
+                      <div style="float:left;width:60px;margin:18px 0 0 10px;">
+                        <lightning:button label="检索" title="检索数据" onclick="{!c.queryDataBySearchParam}"/>
+                      </div>
+                    </div>
+                    <div style="clear:both"></div>  
+                  </div>
+                <!-- </lightning:layoutItem>
+              </lightning:layout> -->
+              <br/>
+              <br/>
+              <!-- lightning Navigation Component -->
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders" aura:id="returnProductTable" id="returnProductTable" style="{!v.proDataPageSwitch == 'close' ? 'display:none' : 'width:100%;table-layout:fixed;'}">
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th style="width:26%;height:18px;"><div class="slds-truncate">产品名称</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">产品家族</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">产品系列</div></th>
+                    <th style="width:19%;height:18px;"><div class="slds-truncate">产品型号</div></th>
+                    <th style="width:15%;height:18px;"><div class="slds-truncate">产品参数</div></th>
+                    <th style="width:8%;height:18px;"><div class="slds-truncate">操作</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <aura:iteration items="{!v.data}" var="item">
+                    <tr class="slds-hint-parent">
+                      <td style="width:26%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" name="{!item.Id}" onclick="{!c.linkProductDetailPageByNewWindow}">{!item.Name}</a></div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.ProductFamily__c}</div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.ProductLine__c}</div></td>
+                      <td style="width:19%;height:70px;"><div class="slds-truncate">{!item.ProductModel__c}</div></td>
+                      <td style="width:15%;height:70px;"><div class="slds-truncate">{!item.ProductParameter__c}</div></td>
+                      <td style="width:8%;height:70px;"><div class="slds-truncate" ><a style="color:#000000;" onclick="{!c.addProDataToTemporaryList}" data-id="{!item.Id}">选择</a></div></td>
+                    </tr>
+                  </aura:iteration>
+                </tbody>
+              </table>
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders" id="returnaAcessoryTable" style="{!v.accDataPageSwitch == 'close' ? 'display:none' : 'width:100%;table-Layout:fixed;'}">
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th style="width:26%;height:18px;"><div class="slds-truncate">附件名称</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">附件家族</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">附件系列</div></th>
+                    <th style="width:19%;height:18px;"><div class="slds-truncate">附件型号</div></th>
+                    <th style="width:15%;height:18px;"><div class="slds-truncate">附件参数</div></th>
+                    <th style="width:8%;height:18px;"><div class="slds-truncate">操作</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <aura:iteration items="{!v.data}" var="item">
+                    <tr class="slds-hint-parent">
+                      <td style="width:26%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" name="{!item.Id}" onclick="{!c.linkProductDetailPageByNewWindow}">{!item.AccessoryName__c}</a></div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.AccessoryFamaily__c}</div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.AccessorySeries__c}</div></td>
+                      <td style="width:19%;height:70px;"><div class="slds-truncate">{!item.AccessoryType__c}</div></td>
+                      <td style="width:15%;height:70px;"><div class="slds-truncate">{!item.AccessoryParameter__c}</div></td>
+                      <td style="width:8%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" onclick="{!c.addAccDataToTemporaryList}" data-id="{!item.Id}">选择</a></div></td>
+                    </tr>
+                  </aura:iteration>
+                </tbody>
+              </table>
+              <br/>
+              <div class="slds-align_absolute-center" style="{!and(v.proDataPageSwitch == 'close', v.accDataPageSwitch == 'close') ? 'display:none' : 'display:block;'}">
+                <lightning:layout multipleRows="true" horizontalAlign="center">
+                  <lightning:layoutItem padding="around-small" flexibility="auto">
+                    <lightning:button label="First" iconName="utility:left" iconPosition="left"
+                                    onclick="{!c.onFirst}" disabled="{! v.currentPageNumber == 1}"/>
+                    <lightning:button iconName="utility:chevronleft" iconPosition="left"
+                                    onclick="{!c.onPrev}" disabled="{! v.currentPageNumber == 1}"/>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.processMe}" name="1" 
+                      class="{! (v.currentPageNumber == 1) ? 'selected' : ''}">1</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+
+                    <aura:iteration items="{!v.pageList}" var="item">
+                      <span class="slds-var-p-horizontal_x-small">
+                        <a onclick="{!c.processMe}" name="{!item}"
+                          class="{! (v.currentPageNumber == item) ? 'selected' : ''}">{!item}</a>
+                      </span>
+                    </aura:iteration>
+                    
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.processMe}" name="{!v.totalPages}"
+                        class="{! (v.currentPageNumber == v.totalPages) ? 'selected' : ''}">{!v.totalPages}</a>
+                    </span>
+                    <lightning:button iconName="utility:chevronright" iconPosition="right" 
+                                    disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onNext}"/>
+                    <lightning:button label="Last" iconName="utility:right" iconPosition="right" 
+                                    disabled="{! v.currentPageNumber == v.totalPages}" onclick="{!c.onLast}"/>
+                  </lightning:layoutItem>
+                </lightning:layout>
+              </div>
+            </div>
+          </lightning:layoutItem>
+          <lightning:layoutItem padding="around-small" size="6">
+            <div style="{!v.selProDataPageSwitch == 'open' || v.selAccDataPageSwitch == 'open' ? 'display:none' : 'display:block;'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">已选列表</td>
+                </tr>
+              </table>
+            </div>
+            <div style="{!v.selProDataPageSwitch == 'close' ? 'display:none' : 'display:block;'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">已选产品</td>
+                </tr>
+              </table>
+            </div>
+            <div style="{!v.selAccDataPageSwitch == 'close' ? 'display:none' : 'display:block'}">
+              <table style="font-size:24px">
+                <tr>
+                  <td height="45" style="color:#000000;text-align:center;">已选附件</td>
+                </tr>
+              </table>
+            </div>
+            <div class="slds-box slds-theme_default" style="margin-right: 20px;height:691px;"> 
+              <div style="{!v.selProDataPageSwitch == 'open' || v.selAccDataPageSwitch == 'open' ? 'width:847px;' : 'display:none;'}">
+                <lightning:button class="saveButtonCss" variant="brand" label="保存" title="保存" onclick="{! c.handleClick }"/>
+              </div>
+              <div style="height:174px;width:847px;">
+                <table style="font-size:12px;color:#000000;border-collapse: collapse;width:100%;table-Layout:fixed;">
+                  <tr style="{!v.selProDataPageSwitch == 'open' || v.selAccDataPageSwitch == 'open' ? '' : 'display:none;'}">
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">货币:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">美元</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">对人民币汇率:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">6.82</td>
+                  </tr>
+                  <tr style="{!v.selProDataPageSwitch == 'close' ? 'display:none;' : ''}">
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff">产品标准总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.proStandardTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">产品成本总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.proCostTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">产品销售总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.proSalesTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">已选产品总数:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.proSalesTotalQuantity}</td>
+                  </tr>
+                  <tr style="{!v.selAccDataPageSwitch == 'close' ? 'display:none;' : ''}">
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">附件标准总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.accStandardTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">附件成本总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.accCostTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">附件销售总价:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.accSalesTotalPrice}</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;background-color: #9A9A9A;color:#ffffff;">已选附件总数:</td>
+                    <td style="border:1px solid black;font-weight: bold;height:50px;text-align:center;background-color: #EEEEEE;">{!v.accSalesTotalQuantity}</td>
+                  </tr>
+                </table>
+              </div>
+              <br/>
+              <br/>
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders" id="temporaryProductTable" style="{!v.selProDataPageSwitch == 'close' ? 'display:none' : 'width:100%;table-Layout:fixed;margin-top:-30px;'}">
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th style="width:22%;height:18px;"><div class="slds-truncate">产品名称</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">产品型号</div></th>
+                    <th style="width:11%;height:18px;"><div class="slds-truncate">标准单价</div></th>
+                    <th style="width:11%;height:18px;"><div class="slds-truncate">成本单价</div></th>
+                    <th style="width:12%;height:18px;"><div class="slds-truncate">销售单价</div></th>
+                    <th style="width:15%;height:18px;"><div class="slds-truncate">数量</div></th>
+                    <th style="width:12%;height:18px;"><div class="slds-truncate">操作</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <aura:iteration items="{!v.selTemporaryPaginationList}" var="item">
+                    <tr class="slds-hint-parent">
+                      <td style="width:22%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" name="{!item.Id}" onclick="{!c.linkProductDetailPageByNewWindow}">{!item.Name}</a></div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.ProductModel__c}</div></td>
+                      <td style="width:11%;height:70px;"><div class="slds-truncate">{!item.StandarPrice}</div></td>
+                      <td style="width:11%;height:70px;"><div class="slds-truncate">{!item.ProductPrice__c}</div></td>
+                      <td style="width:12%;height:70px;vertical-align:middle;"><div class="slds-truncate"><lightning:input pattern="[0-9]*" value="{!item.proSalesPrice}" accesskey="{!item.Id}" onblur="{!c.calculateProSalesPrice}" style="width:70px;margin-left:3px;" type="text"></lightning:input></div></td>
+                      <td style="width:12%;height:70px;vertical-align:middle;"><div class="slds-truncate"><lightning:input pattern="[0-9]*" style="width:70px;margin-left:13px;" accesskey="{!item.Id}" onblur="{!c.calculateProQuantity}" type="text" value="{!item.proSalesQuantity}"></lightning:input></div></td>
+                      <td style="width:12%;height:70px;"><div class="slds-truncate" ><a style="color:#000000;" onclick="{!c.delProDataToTemporaryList}" data-id="{!item.Id}">删除</a></div></td>
+                    </tr>
+                  </aura:iteration>
+                </tbody>
+              </table>
+              <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Example table of Opportunities with vertical borders" id="temporaryAccessoryTable" style="{!v.selAccDataPageSwitch == 'close' ? 'display:none' : 'width:100%;table-Layout:fixed;margin-top:-30px;'}">
+                <thead>
+                  <tr class="slds-line-height_reset">
+                    <th style="width:22%;height:18px;"><div class="slds-truncate">附件名称</div></th>
+                    <th style="width:14%;height:18px;"><div class="slds-truncate">附件型号</div></th>
+                    <th style="width:11%;height:18px;"><div class="slds-truncate">标准单价</div></th>
+                    <th style="width:11%;height:18px;"><div class="slds-truncate">成本单价</div></th>
+                    <th style="width:12%;height:18px;"><div class="slds-truncate">销售单价</div></th>
+                    <th style="width:15%;height:18px;"><div class="slds-truncate">数量</div></th>
+                    <th style="width:12%;height:18px;"><div class="slds-truncate">操作</div></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <aura:iteration items="{!v.selAccTemporaryPaginationList}" var="item">
+                    <tr class="slds-hint-parent">
+                      <td style="width:22%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" name="{!item.Id}" onclick="{!c.linkProductDetailPageByNewWindow}">{!item.Name}</a></div></td>
+                      <td style="width:14%;height:70px;"><div class="slds-truncate">{!item.ProductModel__c}</div></td>
+                      <td style="width:11%;height:70px;"><div class="slds-truncate">{!item.StandarPrice}</div></td>
+                      <td style="width:11%;height:70px;"><div class="slds-truncate">{!item.ProductPrice__c}</div></td>
+                      <td style="width:12%;height:70px;vertical-align:middle;"><div class="slds-truncate"><lightning:input pattern="[0-9]*" value="{!item.accSalesPrice}" accesskey="{!item.Id}" onblur="{!c.calculateAccSalesPrice}" style="width:70px;margin-left:3px;" type="text"></lightning:input></div></td>
+                      <td style="width:12%;height:70px;vertical-align:middle;"><div class="slds-truncate"><lightning:input pattern="[0-9]*" style="width:70px;margin-left:13px;" accesskey="{!item.Id}" onblur="{!c.calculateAccQuantity}" type="text" value="{!item.accSalesQuantity}"></lightning:input></div></td>
+                      <td style="width:12%;height:70px;"><div class="slds-truncate"><a style="color:#000000;" onclick="{!c.delAccDataToTemporaryList}" data-id="{!item.Id}">删除</a></div></td>
+                    </tr>
+                  </aura:iteration>
+                </tbody>
+              </table>
+              <br/>
+              <div class="slds-align_absolute-center" style="{!v.selProDataPageSwitch == 'close' ? 'display:none' : 'display:block;'}">
+                <lightning:layout multipleRows="true" horizontalAlign="center">
+                  <lightning:layoutItem padding="around-small" flexibility="auto">
+                    <lightning:button label="First" iconName="utility:left" iconPosition="left"
+                                    onclick="{!c.onSelFirst}" disabled="{! v.selProCurrentPageNumber == 1}"/>
+                    <lightning:button iconName="utility:chevronleft" iconPosition="left"
+                                    onclick="{!c.onSelPrev}" disabled="{! v.selProCurrentPageNumber == 1}"/>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.selProcessMe}" name="1" 
+                      class="{! (v.selProCurrentPageNumber == 1) ? 'selected' : ''}">1</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+                    
+                    <aura:iteration items="{!v.selProPageList}" var="item">
+                      <span class="slds-var-p-horizontal_x-small">
+                        <a onclick="{!c.selProcessMe}" name="{!item}"
+                          class="{! (v.selProCurrentPageNumber == item) ? 'selected' : ''}">{!item}</a>
+                      </span>
+                    </aura:iteration>
+                    
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.selProcessMe}" name="{!v.selProTotalPages}"
+                        class="{! (v.selProCurrentPageNumber == v.selProTotalPages) ? 'selected' : ''}">{!v.selProTotalPages}</a>
+                    </span>
+                    <lightning:button iconName="utility:chevronright" iconPosition="right" 
+                                    disabled="{! v.selProCurrentPageNumber == v.selProTotalPages}" onclick="{!c.onSelNext}"/>
+                    <lightning:button label="Last" iconName="utility:right" iconPosition="right" 
+                                    disabled="{! v.selProCurrentPageNumber == v.selProTotalPages}" onclick="{!c.onSelLast}"/>
+                  </lightning:layoutItem>
+                </lightning:layout>
+              </div>
+              <div class="slds-align_absolute-center" style="{!v.selAccDataPageSwitch == 'close' ? 'display:none' : 'display:block;'}">
+                <lightning:layout multipleRows="true" horizontalAlign="center">
+                  <lightning:layoutItem padding="around-small" flexibility="auto">
+                    <lightning:button label="First" iconName="utility:left" iconPosition="left"
+                                    onclick="{!c.onSelAccFirst}" disabled="{! v.selAccCurrentPageNumber == 1}"/>
+                    <lightning:button iconName="utility:chevronleft" iconPosition="left"
+                                    onclick="{!c.onSelAccPrev}" disabled="{! v.selAccCurrentPageNumber == 1}"/>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.selAccProcessMe}" name="1" 
+                      class="{! (v.selAccCurrentPageNumber == 1) ? 'selected' : ''}">1</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+                    
+                    <aura:iteration items="{!v.selAccPageList}" var="item">
+                      <span class="slds-var-p-horizontal_x-small">
+                        <a onclick="{!c.selAccProcessMe}" name="{!item}"
+                          class="{! (v.selAccCurrentPageNumber == item) ? 'selected' : ''}">{!item}</a>
+                      </span>
+                    </aura:iteration>
+                    
+                    <span class="slds-var-p-horizontal_xxx-small">
+                      <a>...</a>
+                    </span>
+                    <span class="slds-var-p-horizontal_x-small">
+                      <a onclick="{!c.selAccProcessMe}" name="{!v.selAccTotalPages}"
+                        class="{! (v.selAccCurrentPageNumber == v.selAccTotalPages) ? 'selected' : ''}">{!v.selAccTotalPages}</a>
+                    </span>
+                    <lightning:button iconName="utility:chevronright" iconPosition="right" 
+                                    disabled="{! v.selAccCurrentPageNumber == v.selAccTotalPages}" onclick="{!c.onSelAccNext}"/>
+                    <lightning:button label="Last" iconName="utility:right" iconPosition="right" 
+                                    disabled="{! v.selAccCurrentPageNumber == v.selAccTotalPages}" onclick="{!c.onSelAccLast}"/>
+                  </lightning:layoutItem>
+                </lightning:layout>
+              </div>
+            </div>
+          </lightning:layoutItem>
+        </lightning:layout>
+      </lightning:layoutItem>
+    </lightning:layout>
+  </div>
+</aura:component>

@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,Lightning:hasPageReference,forceCommunity:searchInterface" access="global">
+  <aura:attribute name="searchText" type="String"/>  
+
+  <lightning:navigation aura:id="navService"/>
+  <div class="slds-form-element slds-lookup" data-select="single" style="border-radius: 25px;">
+    <div class="slds-form-element__control">
+      <div class="slds-input-has-icon slds-input-has-icon--right">
+        <lightning:button class="concern" iconName="utility:search" onclick="{!c.navigateToSearchResult}"><div class="concernChild"></div></lightning:button>
+        <!-- <lightning:button class="concern" iconName="utility:search" onclick="{!c.queryKnowledgeData}"><div class="concernChild"></div></lightning:button> -->
+        <!-- <lightning:buttonIcon onblur="{!c.updateBackGround}" iconName="utility:search" size="small" alternativeText="Search" class="slds-input__icon" onclick="{!c.queryKnowledgeData}" /> -->
+        <ui:inputText value="{!v.searchText}" class="searchInput" placeholder="検索 ..." />
+      </div>
+    </div>
+  </div>
+</aura:component>

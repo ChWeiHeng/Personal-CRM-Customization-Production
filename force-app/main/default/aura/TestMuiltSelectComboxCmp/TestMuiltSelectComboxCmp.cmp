@@ -1,0 +1,16 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global">
+    <aura:attribute name="options" type="List" default="[{'label':'Bob','value':'123'},
+                                                         {'label':'Chrissey','value':'345'},
+                                                         {'label':'Jessica','value':'456','disabled': true},
+                                                         {'label':'Sunny','value':'567'},
+                                                         {'label':'Keven','value':'789'},
+                                                         {'label':'Rafael','value':'987'},
+                                                         {'label':'Lynn','value':'876'},
+                                                         {'label':'Karo','value':'765'},
+                                                         {'label':'Snoop','value':'654'},
+                                                         {'label':'Kanye','value':'543'},
+                                                         {'label':'Kadsh','value':'432'},
+                                                         {'label':'Kim','value':'321'}]" />
+    <aura:attribute name="selectedValues" type="List" default="" description="Selected value in Multi Select" />
+    <c:multiSelectCombobox onselect="{!c.handleSelect}" multiSelect="true" options="{!v.options}" selectedValues="{!v.selectedValues}" ></c:multiSelectCombobox>
+</aura:component>

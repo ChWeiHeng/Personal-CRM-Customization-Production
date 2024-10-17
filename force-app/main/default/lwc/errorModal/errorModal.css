@@ -1,0 +1,63 @@
+.custom-error-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px; /* 设置最大宽度 */
+    max-height: 80vh; /* 设置最大高度 */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    overflow: hidden; /* 隐藏溢出内容 */
+    z-index: 1000; /* 确保在最上层 */
+}
+
+.custom-error-header {
+    background-color: #f44336; /* 错误色 */
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-error-content {
+    max-height: 400px; /* 设置内容最大高度 */
+    overflow-y: auto; /* 添加垂直滚动条 */
+    padding: 10px;
+}
+
+.error-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.error-icon {
+    margin-right: 8px; /* 图标与文本之间的间距 */
+    --sds-c-icon-color-foreground-default: red;
+}
+
+/* 增强错误信息条目的可见性 */
+.error-message {
+    color: #333; /* 深色文本 */
+    transition: color 0.3s; /* 平滑过渡效果 */
+}
+
+/* 添加超链接悬停效果 */
+.error-link {
+    cursor: pointer; /* 鼠标指针样式 */
+    text-decoration: underline; /* 下划线效果 */
+}
+
+/* 鼠标悬停时改变文本颜色 */
+.error-link:hover {
+    color: #d50000; /* 悬停时使用深红色 */
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}

@@ -1,0 +1,12 @@
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="width" type="String"/>
+    <lightning:flexipageRegionInfo width="{!v.width}"/>
+    <div class="{! 'container' + (v.width=='SMALL'?' narrowRegion':'')}">
+        <div class="{! 'eachField f1' + (v.width=='SMALL'?' narrowRegion':'')}">
+            <lightning:input name="field1" label="First Name"/>
+        </div>
+        <div class="{! 'eachField f2' + (v.width=='SMALL'?' narrowRegion':'')}">
+            <lightning:input name="field2" label="Last Name"/>
+        </div>
+    </div>
+</aura:component>

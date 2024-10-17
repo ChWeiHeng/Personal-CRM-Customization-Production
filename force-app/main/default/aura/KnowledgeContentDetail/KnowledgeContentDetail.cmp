@@ -1,0 +1,36 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,Lightning:hasPageReference" controller="KnowledgeContentDetailController" access="global">
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="knowledgeContentList" type="List" />
+    <aura:handler name="init" value="{!this}" action="{!c.loadKnowledgeContent}"/> 
+
+    <div class="c-container" style="padding: 1px 30px 30px;">
+        <aura:iteration items="{!v.knowledgeContentList}" var="knowledge">
+            <div>
+                <h1 class="sldTitle" data-aura-rendered-by="6:1890;a" data-aura-class="selfServiceArticleHeaderDetail">
+                    {!knowledge.Title}
+                </h1>
+                <div class="sldContent" data-aura-rendered-by="16:1027;a">
+                    <span>
+                        <span style="font-weight: bold;">
+                            質問
+                        </span>
+                    </span>
+                </div>
+                <div>
+                    <lightning:formattedRichText value="{!knowledge.Question__c}"/>
+                </div>
+                <br/>
+                <div class="sldContent" data-aura-rendered-by="16:1027;a">
+                    <span>
+                        <span style="font-weight: bold;">
+                            回答
+                        </span>
+                    </span>
+                </div>
+                <div >
+                    <lightning:formattedRichText value="{!knowledge.Answer__c}"/>
+                </div>
+            </div>
+        </aura:iteration>
+    </div>
+</aura:component>

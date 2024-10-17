@@ -1,0 +1,20 @@
+<template>
+    <div class="custom-error-modal">
+        <div class="custom-error-header">
+            <h2>错误信息</h2>
+            <button class="close-button" onclick={handleClose}>关闭</button>
+        </div>
+        <div class="custom-error-content">
+            <template for:each={errors} for:item="error">
+                <div key={error.fieldName} class="error-item">
+                    <lightning-icon icon-name="utility:error" alternative-text="Error" size="small" class="error-icon"></lightning-icon>
+                    <span class="error-message error-link" 
+                          onclick={handleErrorClick} 
+                          data-field-name={error.fieldName}>
+                        {error.message}
+                    </span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

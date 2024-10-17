@@ -1,0 +1,45 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes,force:hasRecordId,Lightning:hasPageReference,lightning:isUrlAddressable" controller="SearchKnowledgeCatalogController" access="global">
+  <aura:attribute name="knowledgeArticles" type="List" />
+  <aura:attribute name="allKnowledgeArticlesData" type="List" />
+  <aura:attribute name="loadMoreDataFlag" type="Boolean" />
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+  <lightning:navigation aura:id="navService"/>
+  <aura:iteration items="{!v.knowledgeArticles}" var="knowledge">
+  <ul class=" article-list " aria-describedby="" data-aura-rendered-by="582:0">
+    <li style="margin: 0;border-bottom: 1px solid #efefef">
+      <article class="summary" data-aura-rendered-by="4:1455;a">
+        <a name="{!knowledge.Id}" onclick="{!c.handleKnowledgePageNavigate}" style="text-decoration: none;">
+          <h2 class="article-head" style="color: rgb(238, 117, 117);overflow:hidden;white-space: nowrap;text-overflow: ellipsis;" data-aura-rendered-by="11:1455;a">
+            <lightning:formattedRichText value="{!knowledge.Title}"/>
+          </h2>
+        </a>
+        <span style="font-size: 12px;">
+          {!knowledge.ArticleNumber}
+        </span>
+        <span style="font-size: 12px;">
+            •
+        </span>
+        <span style="font-size: 12px;">
+            最終更新 {!knowledge.LastModifiedDate}
+            <div class="topicCatalogFooterStyle">
+              <lightning:formattedRichText value="{!knowledge.Answer__c}"/>
+          </div>
+        </span>
+      </article>
+    </li>
+    <br/>
+  </ul>
+  </aura:iteration>
+  <br/>
+  <br/>
+  <div style="{!!v.loadMoreDataFlag ? 'display:none' : 'display:block'}">
+    <lightning:layout horizontalAlign="center">
+      <a onclick="{!c.loadMoreData}" style="text-decoration:none;" class="article-link selfServiceArticleHeaderDetail" data-special-link="true" data-aura-rendered-by="10:1455;a" data-aura-class="selfServiceArticleHeaderDetail">
+        <div style="width:200px;height:40px;background-color:#ff0000;border: 1px solid;border-radius: 25px;color: white;text-align: center;padding-top: 10px;font-size: 12px;">
+          さらに読み込み
+        </div>
+      </a>
+    </lightning:layout>
+  </div>
+</aura:component>

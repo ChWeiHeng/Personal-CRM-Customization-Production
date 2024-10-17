@@ -1,0 +1,88 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 04-25-2023
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <lightning-card>
+    <div class="c-container">
+            <lightning-layout multiple-rows="true">
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-layout>
+                        <lightning-layout-item padding="around-small" size="3">
+                            <div class="page-section page-right">
+                                <div style="font-size:18px;padding-bottom:10px;">
+                                    Categoryから探す
+                                </div>
+                                <template for:each={categoryList} for:item="category">
+                                    <li style="list-style-type:none;border-top:1px solid gray;font-size: 16px;padding-top:10px;padding-bottom:10px;" key={category.Id}>
+                                        <a title={category.Name} href="#" onclick={navagateToCategoryList} style="text-decoration: none;color:black;">{category.Name}</a>
+                                    </li>
+                                </template>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small" size="9">
+                            <template for:each={productList} for:item="product">
+                                <li key={product.Id} style="list-style-type:none;color: rgba(0, 0, 0, 0.63);width:300px;float:left;margin:15px;border: 1px solid gray;padding:10px;font-weight:bold;">
+                                    <div style="height: 200px;Width:100%;">
+                                        <lightning-formatted-rich-text value={product.ProductImage__c}></lightning-formatted-rich-text>
+                                    </div>
+                                    <br/><br/><br/>
+                                    <span>{product.Name}   ￥{product.ProductPrice__c}</span>
+                                    <br/><br/>
+                                    <div style="height: 200px;">
+                                        <lightning-formatted-text value={product.Description}></lightning-formatted-text>
+                                    </div>
+                                    <br/><br/>
+                                    <button class="slds-button ytp-button" onclick={createPromotionProduct} title={product.Id} >カートに入れる</button>
+                                </li>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </lightning-card>
+    
+    <!-- Pop Window Template Start -->
+    <template if:true={popWindowFlag}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create PromotionGoods Product</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-record-edit-form class="formData" object-api-name="WeChat__c" onsubmit={insertWeChatData} onsuccess={handleSuccess}>
+                        <lightning-messages></lightning-messages>
+                        <lightning-input-field field-name='Name' value={insertProductName}></lightning-input-field>
+                        <lightning-input-field field-name='Chat_Price__c' value={insertProductPrice}></lightning-input-field>
+                        <lightning-input-field field-name='WeChat_TextArea__c' value={insertProductImage}></lightning-input-field>
+                        <lightning-input-field field-name='WeChat_User_TextArea__c' value={insertProductIntroduce}></lightning-input-field>
+                        <!-- <div style="text-align: right;">
+                            <lightning-button class="slds-m-top_small" variant="brand" type="submit" name="insert" label="Insert"></lightning-button>
+                        </div> -->
+                    </lightning-record-edit-form>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_brand" onclick={insertWeChatData} title="Insert">Insert</button>
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- Pop Window Template End -->
+</template>

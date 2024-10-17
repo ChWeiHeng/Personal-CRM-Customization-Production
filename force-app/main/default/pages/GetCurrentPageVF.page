@@ -1,0 +1,45 @@
+<apex:page standardController="WeChat__c" lightningStylesheets="true" showHeader="false" sidebar="false" extensions="GetCurrentPageVFController">
+    <html>
+        <head>
+            <style>
+                .labelClass {
+                    font-weight: bold;
+                }
+                .selectClass {
+                    width: 150px;
+                }
+            </style>
+        </head>
+        <body>
+            <table border="1">
+                <tr>
+                    <th>Label</th>
+                    <th>Object</th>
+                    <th>Selected Item</th>
+                </tr>
+                <apex:repeat value="{!strings}" var="string" id="theRepeat">
+                    <apex:form >
+                        <tr>
+                            <td>
+                                <apex:outputText value="{!dynamicLabels[string]}" styleClass="labelClass"/>
+                            </td>
+                            <td>
+                                <apex:selectList size="1" value="{!selObj}" styleClass="selectClass" disabled="true">
+                                    <apex:selectOptions value="{!objectList}"></apex:selectOptions>
+                                </apex:selectList>
+                            </td>
+                            <td id="selItemId">
+                                <apex:selectList size="1" value="{!selItem}" styleClass="selectClass">
+                                    <apex:selectOptions value="{!SelectOptionS}"></apex:selectOptions>
+                                    <apex:actionSupport event="onchange" reRender="selItemId, text-input-id-47, inputAreaId, error-message-id-49" action="{!SelectedOptionT}">
+                                        <apex:param name="selectedNo" value="{!string}" assignTo="{!selectedNo}"/>
+                                    </apex:actionSupport>
+                                </apex:selectList>
+                            </td>
+                        </tr>
+                    </apex:form>
+                </apex:repeat>
+            </table>
+        </body>
+    </html>
+</apex:page>

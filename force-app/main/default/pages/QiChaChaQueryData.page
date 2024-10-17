@@ -1,0 +1,162 @@
+<apex:page standardController="Account" extensions="QiChaChaQueryDataController" id="pg"  sidebar="true" lightningStylesheets="true">
+  <apex:pageMessages />
+     <apex:slds />
+    
+    <apex:form id="frm">
+        <script>
+        // Character limits of search product for all fields
+        var searchCharacterLimit = 2;
+        </script>
+        <table class="list" width="100%">
+        </table>        
+        <input type="hidden" id="oldAccountName" value="" />        
+        <input type="hidden" id="oldShippingCountry" value="" />        
+        <script>
+        
+        //Function to trim string
+        function fncTrim(value) {
+            return value.replace(/^\s*/, "").replace(/\s*$/, "");
+        }
+        
+        function goToBack(){
+            window.location = '/{!AccId}';
+            return false;
+        }
+        
+        function sortAccountDataJS(sortField) {
+            var txtAccountName = document.getElementById("pg:frm:txtAccountName").value;
+            
+            var isValid = 'No';
+            
+            if(fncTrim(txtAccountName).length >= searchCharacterLimit){
+                isValid = 'Yes';
+            }
+            
+            if(isValid == 'Yes') {
+                sortAccountData(sortField);
+            }
+        }
+        
+        function createNewAccount() {
+           var countsize =0;
+            var value = document.body.querySelectorAll("input[type='checkbox']");
+            for (var i = 0; i < value.length; i++) {
+               if (value[i].checked) {
+                   countsize = countsize+1;
+             }
+            }
+            if(countsize==1){
+                alert('保存成功');
+                 window.location = '/{!AccId}'
+            }else if(countsize>1){
+                 alert('不能选择多个公司');
+            }else {
+                alert('不能不选择公司');
+            }
+        }
+
+        function checked_window() {
+        	var new_window = window.open('/{!AccId}');
+            //循环检测窗口是否关闭
+            var loop = setInterval(function() {   
+                //如果新窗口关闭了，刷新原来的页面  
+                if(new_window.closed) {    
+                    clearInterval(loop);    
+                    window.location.reload();
+                }    
+            }, 1000);
+        }
+        </script>
+       <div class="slds-form-element">
+          <div class="slds-form-element__control"  style="text-align:center; vertical-align:middel;">
+              <apex:inputText styleClass="slds-input" style="width:10cm"   value="{!AccName}">
+              </apex:inputText>
+              <apex:commandButton styleClass="slds-button slds-button_neutral" value="搜索公司" action="{!NewAccount}" />
+          </div>
+        </div>
+        
+    	<apex:pageBlock title="{!acc.Name}" id="resultBlock" >
+            <apex:pageBlockButtons location="top" >
+                <apex:commandButton styleClass="slds-button slds-button_neutral" value="选择并保存" action="{!accurateSearch}" oncomplete="createNewAccount();"/>
+                <apex:commandButton styleClass="slds-button slds-button_neutral" action="{!cancel}" value="返回"  onclick="return goToBack();"/>
+            </apex:pageBlockButtons>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Select Name">选择</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Company Name">企业名称</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Opera Name">法人名称</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Start Date">成立日期</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Status">企业状态</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="Scope">经营范围</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="No">注册号</div>
+                            </th>
+                            <th class="" scope="col">
+                                <div class="slds-truncate" title="CreditCode">社会统一信用代码</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <apex:repeat value="{!ComPanyInformationList}" var="s" id="pbTable">
+                        <tr class="slds-hint-parent">
+                            <th data-label="Select Name" scope="row">
+                                <div class="slds-truncate" title="Select Name">
+                                   <apex:inputCheckbox id="ischeck" /> <!-- value="{!s.isSelect}" -->
+                                </div>
+                            </th>
+                            <td data-label="Company Name">
+                                <div class="slds-truncate" title="CompanyName">
+                                  <apex:outputLabel value="{!s.QiChaChaComPanyName__c}" />
+                                </div>
+                            </td>
+                            <td data-label="Opera Name">
+                                <div class="slds-truncate" title="OperName">
+                                    <apex:outputLabel value="{!s.QiChaChaOperName__c}" />
+                                </div>
+                            </td>
+                            <td data-label="Start Date">
+                                <div class="slds-truncate" title="StartDate">
+                                          <apex:outputLabel value="{!s.QiChaChaStartDate__c}" />
+                                </div>
+                            </td>
+                            <td data-label="Status">
+                                <div class="slds-truncate" title="Status">
+                                 <apex:outputLabel value="{!s.QiChaChaStatus__c}" />
+                                </div>
+                            </td>
+                            <td data-label="Scope">
+                                <div class="slds-truncate" title="Scope">
+                                 <apex:outputLabel value="{!s.QiChaChaScope__c}" />
+                                </div>
+                            </td>
+                            <td data-label="No">
+                                <div class="slds-truncate" title="No">
+                                  <apex:outputLabel value="{!s.QiChaChaKeyNo__c}" />
+                                </div>
+                            </td>
+                            <td data-label="CreditCode">
+                                <div class="slds-truncate" title="CreditCode">
+                                    <apex:outputLabel value="{!s.QiChaChaCreditCode__c}" />
+                                </div>
+                            </td>
+                        </tr>
+                       </apex:repeat>
+                    </tbody>
+                </table>
+        </apex:pageBlock>
+        
+    </apex:form>
+</apex:page>

@@ -1,0 +1,338 @@
+<template>
+    <!-- <div>
+        <h2 id="element-with-table-label" class="slds-text-heading_medium slds-m-bottom_xx-small">Example data table of
+            Opportunities</h2>
+        <h3 id="other-element-with-table-label" class="slds-text-title slds-m-bottom_small">Using
+            <code>aria-labelledby</code>, instead of aria-label
+        </h3>
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <template for:each={headers} for:item="header">
+                        <th key={header.key} scope="col">
+                            <div class="slds-truncate">{header.label}</div>
+                        </th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={recordName} for:item="record">
+                    <c-test-to-sub-table class="slds-hint-parent custom-sub-table" key={record.No}
+                        record={record}></c-test-to-sub-table>
+                </template>
+            </tbody>
+        </table>
+    </div> -->
+
+
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+        aria-label="Example table of Opportunities with vertical borders">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col"></th>
+                <th class="" scope="col">件数</th>
+                <th class="" scope="col">概要</th>
+                <template for:each={temporyData} for:item="result">
+                    <th scope="col" key={result.Name}>
+                        <div>{result.Car_Name}</div>
+                        <div>
+                            <lightning-formatted-rich-text value={result.Car_Image}></lightning-formatted-rich-text>
+
+                        </div>
+                        <div>{result.Car_No_With_Type}</div>
+                        <div>
+                            <!-- <template for:each={dataResults.Car_Drivers} for:item="resultDrivers">
+                                <span key={resultDrivers.Car_Driver_Id}>{resultDrivers.Car_Driver_Name}</span>
+                            </template> -->
+                        </div>
+                    </th>
+                </template>
+            </tr>
+        </thead>
+        <tbody>
+            <template for:each={temporyDetailData} for:item="resultDetail">
+                <template for:each={resultDetail.Project_RecordTypes} for:item="detail">
+                    <tr key={detail.RecordType_Name}>
+                        <td>
+                            {resultDetail.Project_Working_Date}
+                        </td>
+                        <td>
+                            {detail.RecordType_Name}
+                        </td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>现場名</td>
+                                </tr>
+                                <tr>
+                                    <td>場所</td>
+                                </tr>
+                                <tr>
+                                    <td>受注先</td>
+                                </tr>
+                                <tr>
+                                    <td>営業担当</td>
+                                </tr>
+                                <tr>
+                                    <td>開始時間</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <template for:each={resultDetail.DispatchCarColDatas} for:item="dispatch">
+
+                            <template lwc:if={dispatch.Project_WorkingDates}>
+                                <td key={dispatch.Car_Id}>
+                                    <template for:each={dispatch.Project_WorkingDates} for:item="detailWork">
+                                        <!-- Check 1 按车分开 而不是具体的数据分开 -->
+                                        <template if:true={detail.RecordType_OneCheck}>
+                                            <template if:true={detailWork.RecordType_OneCheck}>
+                                                <td key={detailWork.Project_Car_Id}>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <!-- {detailWork.Project_Name} -->
+                                                                <c-test-to-search-case-info 
+                                                                    object-name="Account" 
+                                                                    field-name="Name" 
+                                                                    label="Account Search" 
+                                                                    placeholder="search Account" 
+                                                                    icon-name="standard:account"
+                                                                    car-id={detailWork.Project_Car_Id}
+                                                                    working-date={detailWork.Project_Date}
+                                                                    record-type-name="1件目"
+                                                                ></c-test-to-search-case-info>
+
+                                                                <c-test-to-search-and-show-modal test-value="a082w00000XRsDDAA1"></c-test-to-search-and-show-modal>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Sales_Representative}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Contact_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Car_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div data-id={detailWork.Project_Unique_Key} onclick={handleClick}>
+                                                                    <!-- 显示组件 -->
+                                                                    <div data-id={detailWork.Project_Unique_Key} data-title="showDateInput">
+                                                                        {detailWork.Project_Company_Dep_Worksite_Start_Time}
+                                                                    </div>
+                                                                    <!-- 输入组件 -->
+                                                                    <lightning-input style="display:none;" data-id={detailWork.Project_Unique_Key} data-title="enterDateInput" type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time} onblur={handleCheckPoint}></lightning-input>
+                                                                    
+                                                                    <!-- <lightning-input data-title={detailWork.Project_Unique_Key} type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time}></lightning-input> -->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_RecordType}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </template>
+                                        </template>
+    
+                                        <!-- Check 2 -->
+                                        <template if:true={detail.RecordType_TwoCheck}>
+                                            <template if:true={detailWork.RecordType_TwoCheck}>
+                                                <td key={detailWork.Project_Car_Id}>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <!-- {detailWork.Project_Name} -->
+                                                                <c-test-to-search-case-info 
+                                                                    object-name="Account" 
+                                                                    field-name="Name" 
+                                                                    label="Account Search" 
+                                                                    placeholder="search Account" 
+                                                                    icon-name="standard:account"
+                                                                    car-id={detailWork.Project_Car_Id}
+                                                                    working-date={detailWork.Project_Date}
+                                                                    record-type-name="2件目"
+                                                                ></c-test-to-search-case-info>
+
+                                                                <c-test-to-search-and-show-modal test-value="a082w00000XRsDDAA1"></c-test-to-search-and-show-modal>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Sales_Representative}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Contact_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Car_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div data-id={detailWork.Project_Unique_Key} onclick={handleClick}>
+                                                                    <!-- 显示组件 -->
+                                                                    <div data-id={detailWork.Project_Unique_Key} data-title="showDateInput">
+                                                                        {detailWork.Project_Company_Dep_Worksite_Start_Time}
+                                                                    </div>
+                                                                    <!-- 输入组件 -->
+                                                                    <lightning-input style="display:none;" data-id={detailWork.Project_Unique_Key} data-title="enterDateInput" type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time} onblur={handleCheckPoint}></lightning-input>
+                                                                    
+                                                                    <!-- <lightning-input data-title={detailWork.Project_Unique_Key} type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time}></lightning-input> -->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_RecordType}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </template>
+                                        </template>
+    
+                                        <!-- Check 3 -->
+                                        <template if:true={detail.RecordType_ThreeCheck}>
+                                            <template if:true={detailWork.RecordType_ThreeCheck}>
+                                                <td key={detailWork.Project_Car_Id}>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <!-- {detailWork.Project_Name} -->
+                                                                <c-test-to-search-case-info 
+                                                                    object-name="Account" 
+                                                                    field-name="Name" 
+                                                                    label="Account Search" 
+                                                                    placeholder="search Account" 
+                                                                    icon-name="standard:account"
+                                                                    car-id={detailWork.Project_Car_Id}
+                                                                    working-date={detailWork.Project_Date}
+                                                                    record-type-name="3件目"
+                                                                ></c-test-to-search-case-info>
+
+                                                                <c-test-to-search-and-show-modal test-value="a082w00000XRsDDAA1"></c-test-to-search-and-show-modal>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Sales_Representative}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Contact_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Car_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div data-id={detailWork.Project_Unique_Key} onclick={handleClick}>
+                                                                    <!-- 显示组件 -->
+                                                                    <div data-id={detailWork.Project_Unique_Key} data-title="showDateInput">
+                                                                        {detailWork.Project_Company_Dep_Worksite_Start_Time}
+                                                                    </div>
+                                                                    <!-- 输入组件 -->
+                                                                    <lightning-input style="display:none;" data-id={detailWork.Project_Unique_Key} data-title="enterDateInput" type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time} onblur={handleCheckPoint}></lightning-input>
+                                                                    
+                                                                    <!-- <lightning-input data-title={detailWork.Project_Unique_Key} type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time}></lightning-input> -->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_RecordType}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </template>
+                                        </template>
+    
+                                        <!-- Check 4 -->
+                                        <template if:true={detail.RecordType_FourCheck}>
+                                            <template if:true={detailWork.RecordType_FourCheck}>
+                                                <td key={detailWork.Project_Car_Id}>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <!-- {detailWork.Project_Name} -->
+                                                                <c-test-to-search-case-info 
+                                                                    object-name="Account" 
+                                                                    field-name="Name" 
+                                                                    label="Account Search" 
+                                                                    placeholder="search Account" 
+                                                                    icon-name="standard:account"
+                                                                    car-id={detailWork.Project_Car_Id}
+                                                                    working-date={detailWork.Project_Date}
+                                                                    record-type-name="夜勤"
+                                                                ></c-test-to-search-case-info>
+
+                                                                <c-test-to-search-and-show-modal test-value="a082w00000XRsDDAA1"></c-test-to-search-and-show-modal>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Sales_Representative}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Contact_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_Car_Name}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <div data-id={detailWork.Project_Unique_Key} onclick={handleClick}>
+                                                                    <!-- 显示组件 -->
+                                                                    <div data-id={detailWork.Project_Unique_Key} data-title="showDateInput">
+                                                                        {detailWork.Project_Company_Dep_Worksite_Start_Time}
+                                                                    </div>
+                                                                    <!-- 输入组件 -->
+                                                                    <lightning-input style="display:none;" data-id={detailWork.Project_Unique_Key} data-title="enterDateInput" type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time} onblur={handleCheckPoint}></lightning-input>
+                                                                    
+                                                                    <!-- <lightning-input data-title={detailWork.Project_Unique_Key} type="time" variant="label-hidden" step="60" value={detailWork.Project_Company_Dep_Worksite_Start_Time}></lightning-input> -->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>{detailWork.Project_RecordType}</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </template>
+                                        </template>
+                                        
+                                    </template>
+                                </td>
+                            </template>
+
+                            <!-- 按照车辆信息来区分而不是具体的数据 -->
+                            <template lwc:elseif={dispatch}>
+                                <td key={dispatch.Car_Id}>
+                                    Test XInjian Cell
+                                    <!-- <div>
+                                        <table>
+                                            <tr>
+                                                <td>detailWork.Project_Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>detailWork.Project_Sales_Representative</td>
+                                            </tr>
+                                            <tr>
+                                                <td>detailWork.Project_Contact_Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>detailWork.Project_Car_Name</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    detailWork.Project_Company_Dep_Worksite_Start_Time
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>detailWork.Project_RecordType</td>
+                                            </tr>
+                                        </table>
+                                    </div> -->
+                                </td>
+                            </template>
+                        </template>
+                    </tr>
+                </template>
+            </template>
+        </tbody>
+    </table>
+</template>

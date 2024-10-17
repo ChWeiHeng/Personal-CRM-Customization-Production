@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global">
+    <aura:attribute name="datas" type="Object"/>
+    <aura:attribute name="recordId" type ="Id"/>
+    <aura:attribute name="parentValueList" type ="List"/>
+    <aura:attribute name="parentFlag" type ="Boolean" default="false"/>
+    <aura:attribute name="showErrors" type="Boolean" />
+    <aura:attribute name="errorMessage" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div role="dialog" tabindex="-1" aria-labelledby="header43" aura:id="SaveModal" class="slds-modal slds-modal_large slds-fade-in-open">
+        <div class="slds-modal__container">
+            <div class="slds-modal__header">
+                <h2 class="slds-text-heading--medium">Assigned To</h2>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <lightning:select name="parentSelect" aura:id="parentSelect" label="Technical Sales"> 
+                    <aura:iteration items="{!v.parentValueList}" var="parent" > 
+                        <option value="{!parent.index}" text="{!parent.value}"/> 
+                    </aura:iteration> 
+                </lightning:select> 
+            </div>
+            <div class="slds-modal__footer">
+                <lightning:button variant="brand" label="Save" onclick="{!c.saveSelectData}" disabled="{!v.parentFlag}"/>
+                <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelPage}"/>
+            </div>
+        </div>
+    </div>
+</aura:component>

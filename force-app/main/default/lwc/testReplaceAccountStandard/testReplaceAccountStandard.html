@@ -1,0 +1,135 @@
+<template>
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium">创建客户记录</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form object-api-name="Account" onsuccess={handleSuccess} onload={handleFormLoad} onerror={handleError}>
+                        <lightning-messages></lightning-messages>
+
+                        <lightning-button label="TESTBUTTON 2024/10/14" variant="neutral" icon-name="utility:check" class="custom-button" onclick={completeTask}></lightning-button>
+
+                        <button class="slds-button slds-button_neutral slds-button_dual-stateful slds-is-pressed" aria-live="assertive" aria-pressed="true">
+                            <span class="slds-text-not-pressed">
+                                <svg class="slds-button__icon slds-button__icon_small slds-button__icon_left" aria-hidden="true">
+                                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#add"></use>
+                                </svg>
+                            </span>
+                            <span class="slds-text-pressed">
+                                <svg class="slds-button__icon slds-button__icon_small slds-button__icon_left" aria-hidden="true">
+                                    <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                </svg>
+                            </span>
+                        </button>
+                        
+                        <lightning-file-upload
+                            label="Upload File"
+                            name="fileUploader"
+                            multiple="false"
+                            accept=".pdf,.png,.jpg,.jpeg"
+                            record-id={recordId}
+                            onuploadfinished={handleUploadFinished}>
+                        </lightning-file-upload>
+
+                        <lightning-accordion allow-multiple-sections-open="true" active-section-name={activeSections}>
+                            <!-- Section 1: 基本信息 -->
+                            <lightning-accordion-section name="basicInfo" label="基本信息" icon-name="standard:account">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="Name" field-name="Name"></lightning-input-field>
+                                        <lightning-input-field data-id="ParentId" field-name="ParentId" required="true"></lightning-input-field>
+                                        <lightning-input-field data-id="AccountNumber" field-name="AccountNumber"></lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="Site" field-name="Site"></lightning-input-field>
+                                        <lightning-input-field data-id="Type" field-name="Type"></lightning-input-field>
+                                        <lightning-input-field data-id="Industry" field-name="Industry"></lightning-input-field>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                    
+                            <!-- Section 2: 财务信息 -->
+                            <lightning-accordion-section name="financialInfo" label="财务信息" icon-name="standard:aggregate">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="REVGRD__Inbound_Emails_Count__c" field-name="REVGRD__Inbound_Emails_Count__c" onchange={handleFieldChange}></lightning-input-field>
+                                        <lightning-input-field data-id="AnnualRevenue" field-name="AnnualRevenue" value={annualRevenue}></lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="REVGRD__Inbound_Emails_Effort__c" field-name="REVGRD__Inbound_Emails_Effort__c" onchange={handleFieldChange}></lightning-input-field>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                    
+                            <!-- Section 3: 联系信息 -->
+                            <lightning-accordion-section name="contactInfo" label="联系信息" icon-name="standard:contact">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="Phone" field-name="Phone"></lightning-input-field>
+                                        <lightning-input-field data-id="Fax" field-name="Fax"></lightning-input-field>
+                                        <lightning-input-field data-id="Website" field-name="Website"></lightning-input-field>
+                                        <lightning-input-field data-id="CustomAccountWithLead__c" field-name="CustomAccountWithLead__c"></lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="TickerSymbol" field-name="TickerSymbol"></lightning-input-field>
+                                        <lightning-input-field data-id="Ownership" field-name="Ownership"></lightning-input-field>
+                                        <lightning-input-field data-id="NumberOfEmployees" field-name="NumberOfEmployees"></lightning-input-field>
+                                        <lightning-input-field data-id="Account_Contact__c" field-name="Account_Contact__c"></lightning-input-field>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                    
+                            <!-- Section 4: 第三方集成信息 -->
+                            <lightning-accordion-section name="thirdPartyIntegration" label="第三方集成信息" icon-name="standard:collection">
+                                <div class="slds-grid slds-wrap slds-gutters">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="InsertRecieveDataId__c" field-name="InsertRecieveDataId__c"></lightning-input-field>
+                                        <lightning-input-field data-id="InsertAccountJob__c" field-name="InsertAccountJob__c"></lightning-input-field>
+                                        <lightning-input-field data-id="InsertAccountStatus__c" field-name="InsertAccountStatus__c"></lightning-input-field>
+                                        <lightning-input-field data-id="InsertAccountDateTime__c" field-name="InsertAccountDateTime__c"></lightning-input-field>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input-field data-id="Account_Id__c" field-name="Account_Id__c"></lightning-input-field>
+                                        <lightning-input-field data-id="UpdateDataJob__c" field-name="UpdateDataJob__c"></lightning-input-field>
+                                        <lightning-input-field data-id="UpdateDataStatus__c" field-name="UpdateDataStatus__c"></lightning-input-field>
+                                        <lightning-input-field data-id="UpdateDataDateTime__c" field-name="UpdateDataDateTime__c"></lightning-input-field>
+                                    </div>
+                                </div>
+                            </lightning-accordion-section>
+                        </lightning-accordion>
+                    </lightning-record-edit-form>
+
+                    <template if:true={isLoading}>
+                        <div class="loading-spinner">
+                            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+                        </div>
+                    </template>
+                </div>
+                <div class="slds-modal__footer" style="display: flex; flex-direction: column; align-items: center;">
+                    <!-- 按钮区域 -->
+                    <div class="button-container" style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 0.5rem;">
+                        <!-- 错误处理区域 -->
+                        <template if:true={hasErrors}>
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <lightning-icon class="custom-error-icon" icon-name="utility:error" alternative-text="Error" title="有错误发生" onclick={handleShowErrors}></lightning-icon>
+                                <template if:true={showErrorModal}>
+                                    <c-error-modal errors={errors} onerrorclick={handleErrorSelect} onclose={handleCloseModal}></c-error-modal>
+                                </template>
+                            </div>
+                        </template>
+                        <lightning-button variant="neutral" label="取消" onclick={closeModal}></lightning-button>
+                        <lightning-button variant="brand" label="保存" onclick={handleSave}></lightning-button>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

@@ -1,0 +1,19 @@
+<apex:page lightningStylesheets="true" standardController="WeChat__c" extensions="ReturnErrorMsgController">   
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages /> 
+        </apex:pageBlock>
+    </apex:form>
+    <script src="../../soap/ajax/29.0/connection.js" type="text/javascript"></script>
+    <script src="../../soap/ajax/29.0/apex.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        sforce.connection.sessionId = '{!GETSESSIONID()}';
+        setTimeout("navigateEdit()", 0);
+        
+        function navigateEdit() {
+            alert('1111');
+	    }
+
+	</script>
+</apex:page>

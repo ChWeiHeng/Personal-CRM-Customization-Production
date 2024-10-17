@@ -1,0 +1,11 @@
+<design:component label="Header and Collapsible Left Right Sidebar">
+    <flexipage:template>
+        <flexipage:region name="sidebarLeft" defaultWidth="SMALL" />
+        <flexipage:region name="main" defaultWidth="MEDIUM" />
+        <flexipage:region name="sidebarRight" defaultWidth="SMALL" />
+    </flexipage:template>
+    <design:supportedFormFactors>
+        <design:supportedFormFactor type="Small"/>
+        <design:supportedFormFactor type="Large"/>
+    </design:supportedFormFactors>
+</design:component>

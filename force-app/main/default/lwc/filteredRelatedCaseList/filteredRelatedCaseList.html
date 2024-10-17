@@ -1,0 +1,14 @@
+<template>
+    <lightning-card title="多选列表">
+        <div class="slds-grid slds-wrap">
+            <lightning-combobox
+                label="选择多个选项"
+                placeholder="选择选项"
+                options={options}
+                value={selectedValues}
+                onchange={handleComboboxChange}
+                class="slds-size_1-of-4">
+            </lightning-combobox>
+        </div>
+    </lightning-card>
+</template>

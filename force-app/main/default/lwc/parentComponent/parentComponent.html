@@ -1,0 +1,12 @@
+<!-- parentComponent.html -->
+<template>
+    <c-radio-list-component options={slicerOptions} onoptionschange={handleOptionsChange}></c-radio-list-component>
+    <div if:true={selectedOptions.length}>
+        <p>选定的选项：</p>
+        <ul>
+            <template for:each={selectedOptions} for:item="option">
+                <li key={option}>{option}</li>
+            </template>
+        </ul>
+    </div>
+</template>

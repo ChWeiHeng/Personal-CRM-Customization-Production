@@ -1,0 +1,22 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" access="global">
+    <!-- Should be auto-set -->
+    <aura:attribute name="Height" type="Integer"/>
+    <aura:attribute name="Width" type="Integer"/>
+
+    <aura:attribute name="Steps" type="Integer[]" default="[0,10,20,30,40,50,60,70,80,90,100]"/>
+    <aura:attribute name="stepChange" type="Integer" default="1"/>
+    <aura:attribute name="Tick" type="Integer" default="0.1"/>
+
+    <aura:attribute name="Orientation" type="String" default="Horizontal"/> 
+
+    <aura:attribute name="Min" type="Integer" default="0"/>
+    <aura:attribute name="Max" type="Integer" default="100"/>
+    <aura:attribute name="Value" type="Integer" default="10"/>
+
+    <!-- Handlers  -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <div id='track' aura:id="track" class="track">
+    <div id="knob" aura:id="knob" onmousedown="{!c.onMouseDown}" class="knob"></div>
+    </div>
+</aura:component>

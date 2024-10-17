@@ -1,0 +1,14 @@
+.THIS .fontType {
+    font-family: DINMedium;
+    font-size: 1em;
+    color: #000000;
+    font-weight: normal;
+    margin:0;
+    margin-left: 20px;
+    line-height:40px;
+    text-align:left;
+} 
+
+.THIS .Record {
+	margin-left: 20px;
+}

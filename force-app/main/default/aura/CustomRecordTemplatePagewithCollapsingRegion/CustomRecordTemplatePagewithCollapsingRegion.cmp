@@ -1,0 +1,80 @@
+<aura:component implements="lightning:recordHomeTemplate" description="Full-width header above a main column and collapsible right sidebar.">
+
+    <ltng:require scripts="{!$Resource.jquery}" afterScriptsLoaded="{!c.doInit}" />
+    <!-- <aura:attribute name="header" type="Aura.Component[]" description="Header region"/> -->
+    <aura:attribute name="main" type="Aura.Component[]" description="Main region"/>
+    <aura:attribute name="sidebarLeft" type="Aura.Component[]" description="Collapsible sidebar region left"/>
+    <aura:attribute name="sidebarRight" type="Aura.Component[]" description="Collapsible sidebar region right"/>
+    <!-- <aura:attribute name="sidebar" type="Aura.Component[]" description="Collapsible sidebar region"/> -->
+    <aura:attribute name="isSidebarLeftCollapsed" type="Boolean" access="PRIVATE" default="false" />
+    <aura:attribute name="isSidebarRightCollapsed" type="Boolean" access="PRIVATE" default="false" />
+    <aura:attribute name="click_last_left_region_width" type="String"/>
+    <aura:attribute name="click_last_middle_region_width" type="String"/>
+    <aura:attribute name="click_last_right_region_width" type="String"/>
+
+    <aura:attribute name="click_left_region_is_recover" type="Boolean"/>
+    <aura:attribute name="click_right_region_is_recover" type="Boolean"/>
+
+    <aura:attribute name="startId" type="string"/>
+    <aura:attribute name="parentId" type="string"/>
+
+    <div id="flex-page-box" aura:id="flex-page-box" class="flex-page-box">
+        <div class="slds-grid slds-wrap">
+            <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 intergrated-layout-css" name="left_region" id="flex-page-box-content-left-region" aura:id="flex-page-box-content-left-parent-id">
+                <div id="flex-page-box-content-left" aura:id="flex-page-box-content-left-aura-id" class="flex-page-box-content-left" ondrop="{!c.dropLeft}" ondragover="{!c.allowDrop}">
+                    <!-- <lightning:layoutItem aura:id="flex-page-box-content-left-aura-region" class="{! v.isSidebarLeftCollapsed ? ' slds-hide' : '' }"> -->
+                        {!v.sidebarLeft}
+                    <!-- </lightning:layoutItem> -->
+                </div>
+                <div id="flex-page-sidebar-line-left" aura:id="flex-page-sidebar-line-left" class="drag-element-left" draggable="true" ondragstart="{!c.drag}" onmouseover="{!c.showLeftCollpaseButton}" onmouseout="{!c.hiddenLeftCollpaseButton}"></div>
+                <div id="flex-page-sidebar-line-left-button" aura:id="flex-page-sidebar-line-left-button" class="drag-element-button-left" onmouseover="{!c.showLeftCollpaseButton}" onmouseout="{!c.hiddenLeftCollpaseButton}" onclick="{!c.toggleLeftSection}">
+                    <!-- <lightning:icon
+                        icon-name="utility:left"
+                        class="slds-button__icon slds-button__icon_left slds-section__title-action-icon left-button-icon"
+                        size="xx-small"
+                    ></lightning:icon> -->
+                    <div class="left-container-icon"></div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_8-of-12 intergrated-layout-css" id="flex-page-box-content-middle-region" aura:id="flex-page-box-content-middle-parent-id">
+                <div id="toggle-left-hidden-region" aura:id="toggle-left-hidden-region" class="drag-element-button-left-click-hidden">
+                    <div id="flex-page-toggle-left" aura:id="flex-page-toggle-left" class="drag-element-toggle-left" onmouseover="{!c.showToggleLeftCollpaseButton}" onmouseout="{!c.hiddenToggleLeftCollpaseButton}" onclick="{!c.toggleLeftToRightSection}"></div>
+                    <div id="flex-page-toggle-left-button" aura:id="flex-page-toggle-left-button" class="drag-element-toggle-button-left" onmouseover="{!c.showToggleLeftCollpaseButton}" onmouseout="{!c.hiddenToggleLeftCollpaseButton}" onclick="{!c.toggleLeftToRightSection}">
+                        <div class="right-container-icon"></div>
+                    </div>
+                </div>
+                <div id="flex-page-box-content-middle" aura:id="flex-page-box-content-middle-flex-content" class="flex-page-box-content-middle" ondrop="{!c.drop}" ondragover="{!c.allowDrop}">
+                    <!-- <lightning:layoutItem flexibility="auto"> -->
+                        <!-- <div id="flex-page-bottom"> -->
+                            {!v.main}
+                        <!-- </div> -->
+                    <!-- </lightning:layoutItem> -->
+                </div>
+                <div id="toggle-right-hidden-region" aura:id="toggle-right-hidden-region" class="drag-element-button-right-click-hidden">
+                    <div id="flex-page-toggle-right" aura:id="flex-page-toggle-right" class="drag-element-toggle-right" onmouseover="{!c.showToggleRightCollpaseButton}" onmouseout="{!c.hiddenToggleRightCollpaseButton}" onclick="{!c.toggleRightToLeftSection}"></div>
+                    <div id="flex-page-toggle-right-button" aura:id="flex-page-toggle-right-button" class="drag-element-toggle-button-right" onmouseover="{!c.showToggleRightCollpaseButton}" onmouseout="{!c.hiddenToggleRightCollpaseButton}" onclick="{!c.toggleRightToLeftSection}">
+                        <div class="left-container-icon"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-large-size_2-of-12 intergrated-layout-css" id="flex-page-box-content-right-region" aura:id="flex-page-box-content-right-parent-id">
+                <div id="flex-page-box-content-right" aura:id="flex-page-box-content-right-aura-id" class="flex-page-box-content-right" ondrop="{!c.dropRight}" ondragover="{!c.allowDrop}">
+                    <!-- <lightning:layoutItem class="{! v.isSidebarRightCollapsed ? ' slds-hide' : '' }"> -->
+                        {!v.sidebarRight}
+                    <!-- </lightning:layoutItem> -->
+                </div>
+                <div id="flex-page-sidebar-line-right" aura:id="flex-page-sidebar-line-right" class="drag-element-right" draggable="true" ondragstart="{!c.drag}" onmouseover="{!c.showRightCollpaseButton}" onmouseout="{!c.hiddenRightCollpaseButton}"></div>
+                <div id="flex-page-sidebar-line-right-button" aura:id="flex-page-sidebar-line-right-button" class="drag-element-button-right" onmouseover="{!c.showRightCollpaseButton}" onmouseout="{!c.hiddenRightCollpaseButton}" onclick="{!c.toggleRightSection}">
+                    <!-- <lightning:icon
+                        icon-name="utility:left"
+                        class="slds-button__icon slds-button__icon_left slds-section__title-action-icon left-button-icon"
+                        size="xx-small"
+                    ></lightning:icon> -->
+                    <div class="right-container-icon"></div>
+                </div>
+            </div>
+          </div>
+
+    </div>
+</aura:component>
