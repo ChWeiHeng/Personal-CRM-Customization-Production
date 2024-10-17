@@ -229,7 +229,6 @@ export default class TestReplaceAccountStandard extends NavigationMixin(Lightnin
 
     navigateToRecord(recordId) {
         console.log('$$$$$$ recordId: ' + recordId);
-        console.log('$$$$$$ recordId2: ' + recordId);
         if (recordId) { // 检查记录 ID 是否存在
             try {
                 // 使用 Lightning Navigation API 跳转到新记录页面

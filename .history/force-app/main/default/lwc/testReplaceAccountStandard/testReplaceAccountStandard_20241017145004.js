@@ -229,7 +229,6 @@ export default class TestReplaceAccountStandard extends NavigationMixin(Lightnin
 
     navigateToRecord(recordId) {
         console.log('$$$$$$ recordId: ' + recordId);
-        console.log('$$$$$$ recordId2: ' + recordId);
         if (recordId) { // 检查记录 ID 是否存在
             try {
                 // 使用 Lightning Navigation API 跳转到新记录页面
@@ -248,5 +247,31 @@ export default class TestReplaceAccountStandard extends NavigationMixin(Lightnin
         } else {
             console.error('记录 ID 无效，无法导航到新记录页面。');
         }
+    }
+    
+    handleUploadFinished(event) {
+        // 获取上传完成的文件
+        const uploadedFiles = event.detail.files;
+        if (uploadedFiles.length > 0) {
+            this.convertFileToBase64(uploadedFiles[0]);
+        }
+    }
+
+    convertFileToBase64(file) {
+        // const mimeType = file.type;
+        // console.log('$$$$$$ file type: ' + mimeType);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            // 读取文件为Base64
+            const base64Data = reader.result.split(',')[1];
+            this.uploadToAWS(base64Data);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    uploadToAWS(base64Data) {
+        // 将Base64编码的数据传递到服务器或AWS
+        // 调用Apex或者直接发送HTTP请求到AWS
+        console.log('Base64 Encoded Data: ', base64Data);
     }
 }
